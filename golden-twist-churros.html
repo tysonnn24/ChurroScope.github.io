@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChurroScope</title>
+  <meta name="description" content="ChurroScope – hand-crafted churros with delicious dipping sauces.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <style>
+    :root {
+      --caramel: #c8722a;
+      --gold: #e6a830;
+      --cream: #fdf5e6;
+      --brown-dark: #3b1f0e;
+      --brown-mid: #6b3a1f;
+      --chocolate: #4a2409;
+      --soft-gold: #f5d78e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--brown-dark); overflow-x: hidden; }
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+    /* NAVBAR */
+    .navbar { background: var(--chocolate) !important; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.35); }
+    .navbar-brand { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--gold) !important; display: flex; align-items: center; gap: .55rem; }
+    .navbar-brand span { color: #fff; }
+    .nav-link { color: #f5d78e !important; font-weight: 600; transition: color .2s; margin: 0 .25rem; }
+    .nav-link:hover, .nav-link.active { color: var(--gold) !important; }
+    .navbar-toggler { border-color: var(--gold); }
+    .navbar-toggler-icon { filter: invert(80%) sepia(50%) saturate(400%) hue-rotate(10deg); }
+    .churro-logo { width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+
+    /* BUTTONS */
+    .btn-gold { background: var(--gold); color: var(--brown-dark); font-weight: 700; border: none; padding: .75rem 2rem; border-radius: 50px; font-size: 1rem; transition: transform .2s, box-shadow .2s; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(230,168,48,.45); color: var(--brown-dark); }
+
+    /* HERO */
+    #home {
+      min-height: 100vh;
+      background: linear-gradient(160deg, rgba(58,18,5,.92) 0%, rgba(198,108,38,.7) 60%, rgba(230,168,48,.4) 100%);
+      display: flex; align-items: center; position: relative; overflow: hidden;
+    }
+    #home::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:80px; background:var(--cream); clip-path:ellipse(55% 100% at 50% 100%); }
+    .hero-title { font-size:clamp(3rem,8vw,5.5rem); color:#fff; line-height:1.05; font-style:italic; animation:fadeDown .8s .1s ease both; text-shadow:0 4px 30px rgba(0,0,0,.5); }
+    .hero-sub { color:#fdf5e6cc; font-size:1.1rem; max-width:520px; margin:1.2rem 0 2rem; line-height:1.75; animation:fadeDown .9s .2s ease both; }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+
+    /* SECTION */
+    .section-label { font-size:.78rem; letter-spacing:3px; text-transform:uppercase; color:var(--caramel); font-weight:700; margin-bottom:.5rem; }
+    .section-title { font-size:clamp(1.9rem,4vw,2.7rem); color:var(--brown-dark); }
+    .divider { width:60px; height:4px; background:linear-gradient(90deg,var(--caramel),var(--gold)); border-radius:4px; margin:.75rem auto 2rem; }
+
+    /* ABOUT */
+    #about { padding:100px 0; }
+    .about-img { border-radius:20px; overflow:hidden; box-shadow:18px 18px 0 var(--soft-gold); }
+    .about-img img { width:100%; height:420px; object-fit:cover; display:block; }
+    .about-feature { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.25rem; }
+    .about-icon { width:46px; height:46px; background:linear-gradient(135deg,var(--caramel),var(--gold)); color:#fff; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+
+    /* MENU */
+    #menu { padding:100px 0; background:linear-gradient(180deg,#fdf5e6 0%,#f9ead2 100%); }
+    .menu-tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:2.5rem; }
+    .menu-tab-btn {
+      background:#fff; border:2px solid #e8d5bb; border-radius:50px;
+      padding:.5rem 1.4rem; font-size:.85rem; font-weight:700; color:var(--brown-mid);
+      cursor:pointer; transition:all .2s; font-family:'Nunito',sans-serif;
+      display:flex; align-items:center; gap:.4rem;
+    }
+    .menu-tab-btn:hover { border-color:var(--caramel); color:var(--caramel); }
+    .menu-tab-btn.active { background:var(--caramel); border-color:var(--caramel); color:#fff; }
+    .menu-panel { display:none; }
+    .menu-panel.active { display:block; }
+
+    /* MENU CARDS */
+    .menu-card { background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 6px 30px rgba(58,18,5,.10); transition:transform .3s,box-shadow .3s; height:100%; }
+    .menu-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(58,18,5,.18); }
+    .menu-card-img { height:190px; object-fit:cover; width:100%; background:#e8d5bb; }
+    .menu-card-body { padding:1.4rem; }
+    .menu-price { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--caramel); font-weight:700; }
+    .menu-tag { display:inline-block; background:var(--soft-gold); color:var(--brown-mid); font-size:.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:.2rem .7rem; border-radius:50px; margin-bottom:.6rem; }
+    .menu-tag.bundle { background:#e6f5e1; color:#3a6b1f; }
+    .menu-tag.free { background:#e6f5e1; color:#3a6b1f; }
+    .menu-tag.hot { background:#fde8d0; color:#c8722a; }
+    .menu-tag.ube { background:#e6d5f5; color:#5a3a8a; }
+
+    /* DIPPING */
+    .dip-card { background:#fff; border-radius:20px; box-shadow:0 6px 30px rgba(58,18,5,.10); padding:1.5rem; max-width:480px; margin:0 auto; }
+    .dip-row { display:flex; align-items:center; gap:14px; padding:.75rem 0; border-bottom:1px solid #f0e4d0; }
+    .dip-row:last-child { border-bottom:none; }
+    .dip-swatch { width:24px; height:24px; border-radius:50%; border:2px solid rgba(0,0,0,.08); flex-shrink:0; }
+    .dip-name { font-weight:700; color:var(--brown-dark); font-size:.95rem; }
+    .dip-note { font-size:.8rem; color:var(--brown-mid); opacity:.7; margin-left:auto; }
+
+    /* ICE CREAM */
+    .ic-card { background:#fff; border-radius:20px; box-shadow:0 6px 30px rgba(58,18,5,.10); padding:1.75rem 1.4rem; text-align:center; transition:transform .3s; height:100%; }
+    .ic-card:hover { transform:translateY(-5px); }
+    .ic-emoji { font-size:2.2rem; margin-bottom:.75rem; display:block; }
+
+    /* GALLERY */
+    #gallery { padding:80px 0; background:#f9ead2; }
+    .insta-grid img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:12px; transition:transform .3s,filter .3s; background:#e8d5bb; }
+    .insta-grid img:hover { transform:scale(1.04); filter:brightness(1.05) saturate(1.2); }
+
+    /* FOOTER */
+    footer { background:var(--chocolate); color:#f5d78e; padding:3rem 0 1.5rem; }
+    footer h5 { color:var(--gold); font-family:'Playfair Display',serif; margin-bottom:1rem; }
+    footer a { color:#f5d78e; text-decoration:none; transition:color .2s; }
+    footer a:hover { color:var(--gold); }
+    .footer-social a { width:38px; height:38px; background:rgba(255,255,255,.1); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-right:.4rem; transition:background .2s,color .2s; }
+    .footer-social a:hover { background:var(--gold); color:var(--brown-dark); }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,.1); padding-top:1.25rem; margin-top:2rem; font-size:.85rem; color:rgba(245,215,142,.55); }
+
+    @media(max-width:768px){ .hero-title{font-size:3rem;} #home::after{height:50px;} .about-img{margin-bottom:2.5rem;} }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#home">
+      <img src="ScopeLogo.png" alt="ChurroScope Logo" class="churro-logo"/>
+      ChurroScope<span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+      <ul class="navbar-nav align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="container py-5" style="padding-top:130px!important;">
+    <div class="row">
+      <div class="col-lg-7 col-xl-6">
+        <h1 class="hero-title">ChurroScope</h1>
+        <p class="hero-sub">Churroscope is a combination of words derived from three distinctive terms, Churro, Scope, and Cope. Churro is a fried dough snack originating from Spain and was created by Spanish Shepherds, in which many believed that the name "Churro" was derived from the breed of sheep called Navajo-Churro, as the horns of it resembled the fried dough churro.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#menu" class="btn btn-gold">View Menu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <div class="about-img">
+          <img src="new7.jpg" alt="Making churros"/>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">CORE VALUES<br>C.H.U.R.R.O.S.C.O.P.E</h2>
+        <div class="divider" style="margin-left:0;"></div>
+        <p class="mb-4" style="color:var(--brown-mid);line-height:1.8;">
+          <ul class="list-unstyled" style="font-size:.9rem;opacity:.8;line-height:2;">
+          <li>Creativity</li>
+          <li>Health</li>
+          <li>Uniqueness</li>
+          <li>Reliability</li>
+          <li>Respect</li>
+          <li>Optimism</li>
+          <li>Sustainability</li>
+        </ul>
+        </p>
+        <div class="about-feature">
+          <div class="about-icon"><i class="bi bi-fire"></i></div>
+          <div><strong>Made to Order</strong><br><span style="font-size:.9rem;color:var(--brown-mid);">Every churro is fried fresh when you order.</span></div>
+        </div>
+        <div class="about-feature">
+          <div class="about-icon"><i class="bi bi-stars"></i></div>
+          <div><strong>Flavors</strong><br><span style="font-size:.9rem;color:var(--brown-mid);"> Churinga, Chusquash, Chuweetpotato, Chubanana</span></div>
+        </div>
+        <div class="about-feature">
+          <div class="about-icon"><i class="bi bi-heart-fill"></i></div>
+          <div><strong>Family-Owned Since 2012</strong><br><span style="font-size:.9rem;color:var(--brown-mid);">Three generations of churro mastery, brought to your neighborhood.</span></div>
+        </div>
+        <a href="#menu" class="btn btn-gold mt-3">Explore Our Menu</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="container">
+    <div class="text-center mb-5">
+      <p class="section-label">What We Serve</p>
+      <h2 class="section-title">Our Delicious Menu</h2>
+      <div class="divider"></div>
+    </div>
+
+    <!-- TAB BUTTONS -->
+    <div class="menu-tabs">
+      <button class="menu-tab-btn active" onclick="showMenuPanel('churros', this)">
+        <i class="bi bi-tornado"></i> Churros
+      </button>
+      <button class="menu-tab-btn" onclick="showMenuPanel('bundles', this)">
+        <i class="bi bi-box-seam"></i> Bundles
+      </button>
+      <button class="menu-tab-btn" onclick="showMenuPanel('complimentary', this)">
+        <i class="bi bi-gift"></i> Complimentary
+      </button>
+      <button class="menu-tab-btn" onclick="showMenuPanel('dippings', this)">
+        <i class="bi bi-cup-straw"></i> Dippings
+      </button>
+      <button class="menu-tab-btn" onclick="showMenuPanel('drinks', this)">
+        <i class="bi bi-droplet"></i> Drinks
+      </button>
+    </div>
+
+    <!-- CHURROS PANEL -->
+    <div class="menu-panel active" id="panel-churros">
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <img src="class.jpg" class="menu-card-img" alt="Churinga"/>
+            <div class="menu-card-body">
+              <span class="menu-tag">Moringa</span>
+              <h5 class="mb-1">Churinga</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"> <!-- CHURROS PANEL --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;89</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <img src="filled.jpg" class="menu-card-img" alt="Chusquash"/>
+            <div class="menu-card-body">
+              <span class="menu-tag">Squash</span>
+              <h5 class="mb-1">Chusquash</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"> <!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;89</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <img src="churro.jpg" class="menu-card-img" alt="Chuweetpotato"/>
+            <div class="menu-card-body">
+              <span class="menu-tag">Sweet Potato</span>
+              <h5 class="mb-1">Chuweetpotato</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"> <!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;89</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <img src="class.jpg" class="menu-card-img" alt="Chubanana"/>
+            <div class="menu-card-body">
+              <span class="menu-tag">Banana</span>
+              <h5 class="mb-1">Chubanana</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"> <!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;89</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUNDLES PANEL -->
+    <div class="menu-panel" id="panel-bundles">
+      <div class="row g-4 justify-content-center">
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <img src="churro.jpg" class="menu-card-img" alt="Chubitescope"/>
+            <div class="menu-card-body">
+              <span class="menu-tag bundle">Bundle</span>
+              <h5 class="mb-1">Chubitescope</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Bites in a cup — mini churro bites served in a cup, perfect for sharing or snacking on the go.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;65</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <img src="filled.jpg" class="menu-card-img" alt="Chusixcope"/>
+            <div class="menu-card-body">
+              <span class="menu-tag bundle">Bundle</span>
+              <h5 class="mb-1">Chusixcope</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">6 pcs churros of your chosen flavor packed in a box — great for groups, events, or gifting.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;115</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLIMENTARY PANEL -->
+    <div class="menu-panel" id="panel-complimentary">
+      <div class="row g-4 justify-content-center">
+        <div class="col-sm-6 col-lg-3">
+          <div class="ic-card">
+            <span class="ic-emoji">🍦</span>
+            <h5 class="mb-2">Vanilla Ice Cream</h5>
+            <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:1rem;"><!-- description --></p>
+            <span class="menu-tag free">Complimentary</span>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="ic-card">
+            <span class="ic-emoji">🍫</span>
+            <h5 class="mb-2">Chocolate Ice Cream</h5>
+            <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:1rem;"><!-- description --></p>
+            <span class="menu-tag free">Complimentary</span>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="ic-card">
+            <span class="ic-emoji">💜</span>
+            <h5 class="mb-2">Ube Ice Cream</h5>
+            <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:1rem;"><!-- description --></p>
+            <span class="menu-tag free">Complimentary</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- DIPPINGS PANEL -->
+    <div class="menu-panel" id="panel-dippings">
+      <div class="dip-card">
+        <div class="dip-row">
+          <div class="dip-swatch" style="background:#4a2409;"></div>
+          <span class="dip-name">Chocolate</span>
+          <span class="dip-note">Dark &amp; rich</span>
+        </div>
+        <div class="dip-row">
+          <div class="dip-swatch" style="background:#f5e6c8;border-color:#d4c09a;"></div>
+          <span class="dip-name">White Chocolate</span>
+          <span class="dip-note">Sweet &amp; creamy</span>
+        </div>
+        <div class="dip-row">
+          <div class="dip-swatch" style="background:#d4872a;"></div>
+          <span class="dip-name">Caramel</span>
+          <span class="dip-note">Warm &amp; buttery</span>
+        </div>
+      </div>
+      <p class="text-center mt-4" style="font-size:.85rem;color:var(--brown-mid);opacity:.7;">All dipping sauces are house-made fresh daily.</p>
+    </div>
+
+    <!-- DRINKS PANEL -->
+    <div class="menu-panel" id="panel-drinks">
+      <div class="row g-4 justify-content-center">
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <div class="menu-card-body">
+              <span class="menu-tag">Cold</span>
+              <h5 class="mb-1">Choco Milk</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"><!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;45</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <div class="menu-card-body">
+              <span class="menu-tag">Cold</span>
+              <h5 class="mb-1">Iced Coffee</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"><!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;55</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <div class="menu-card-body">
+              <span class="menu-tag">Cold</span>
+              <h5 class="mb-1">Mango Juice</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"><!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;45</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <div class="menu-card-body">
+              <span class="menu-tag">Cold</span>
+              <h5 class="mb-1">Strawberry Lemonade</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"><!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;55</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <div class="menu-card-body">
+              <span class="menu-tag ube">Bestseller</span>
+              <h5 class="mb-1">Ube Shake</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"><!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;65</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="menu-card">
+            <div class="menu-card-body">
+              <span class="menu-tag hot">Hot</span>
+              <h5 class="mb-1">Hot Chocolate</h5>
+              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;"><!-- description --></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="menu-price">&#8369;55</span>
+                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="text-center mb-4">
+      <p class="section-label">Follow Along</p>
+      <h2 class="section-title">ChurroScope</h2>
+      <div class="divider"></div>
+      <p style="color:var(--brown-mid);">"Don't Churrow away your Happiness"</p>
+    </div>
+    <div class="insta-grid row g-3">
+      <div class="col-4 col-md-2"><img src="new1.jpg" alt="churros 1"/></div>
+      <div class="col-4 col-md-2"><img src="new2.jpg" alt="churros 2"/></div>
+      <div class="col-4 col-md-2"><img src="new3.jpg" alt="churros 3"/></div>
+      <div class="col-4 col-md-2"><img src="new4.jpg" alt="pastry 1"/></div>
+      <div class="col-4 col-md-2"><img src="new5.jpg" alt="pastry 2"/></div>
+      <div class="col-4 col-md-2"><img src="new6.jpg" alt="dessert"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <h5>ChurroScope</h5>
+        <p style="font-size:.9rem;opacity:.75;line-height:1.7;">Churroscope is a combination of words derived from three distinctive terms, Churro, Scope, and Cope. Churro is a fried dough snack originating from Spain and was created by Spanish Shepherds, in which many believed that the name "Churro" was derived from the breed of sheep called Navajo-Churro, as the horns of it resembled the fried dough churro.</p>
+        <div class="footer-social mt-3">
+          <a href="https://www.instagram.com/churro_scope?igsh=NWtzODh5a2oxOWc0"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61582252856025"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.tiktok.com/@churroscope?_r=1&_t=ZS-94dvgCr4O4D"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h5 style="font-size:1rem;">CORE VALUES</h5>
+        <ul class="list-unstyled" style="font-size:.9rem;opacity:.8;line-height:2;">
+          <li>Creativity</li>
+          <li>Health</li>
+          <li>Uniqueness</li>
+          <li>Reliability</li>
+          <li>Respect</li>
+          <li>Optimism</li>
+          <li>Sustainability</li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h5 style="font-size:1rem;">Quick Links</h5>
+        <ul class="list-unstyled" style="font-size:.9rem;opacity:.8;line-height:2;">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#about">About Us</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h5 style="font-size:1rem;">Contact</h5>
+        <p style="font-size:.88rem;opacity:.8;line-height:2;">
+          <i class="bi bi-telephone me-2"></i>+63 917 123 4567<br>
+          <i class="bi bi-envelope me-2"></i>churroscope11@gmail.com<br>
+          <i class="bi bi-geo-alt me-2"></i>PLV<br>
+          <i class="bi bi-clock me-2"></i>Mon–Sun: 9 AM – 10 PM
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom text-center">
+      &copy; ChurroScope. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector('.nav-link[href="#' + e.target.id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.45 });
+  sections.forEach(s => observer.observe(s));
+
+  function showMenuPanel(id, btn) {
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.menu-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
