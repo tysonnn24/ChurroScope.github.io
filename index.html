@@ -71,27 +71,112 @@
     }
     .menu-tab-btn:hover { border-color:var(--caramel); color:var(--caramel); }
     .menu-tab-btn.active { background:var(--caramel); border-color:var(--caramel); color:#fff; }
-    .menu-panel { display:none; }
+    .menu-panel { display:none; animation: panelIn .3s ease; }
     .menu-panel.active { display:block; }
+    @keyframes panelIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-    /* MENU CARDS */
-    .menu-card { background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 6px 30px rgba(58,18,5,.10); transition:transform .3s,box-shadow .3s; height:100%; }
-    .menu-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(58,18,5,.18); }
-    .menu-card-img { height:190px; object-fit:cover; width:100%; background:#e8d5bb; }
-    .menu-card-body { padding:1.4rem; }
+    /* ── MENU CARDS (improved) ── */
+    .menu-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(58,18,5,.08);
+      transition: transform .3s, box-shadow .3s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(58,18,5,.16); }
+
+    /* image wrapper with overlay badge */
+    .menu-card-img-wrap { position: relative; overflow: hidden; }
+    .menu-card-img {
+      height: 180px; object-fit: cover; width: 100%;
+      background: #e8d5bb;
+      display: block;
+      transition: transform .4s ease;
+    }
+    .menu-card:hover .menu-card-img { transform: scale(1.05); }
+
+    .menu-card-body {
+      padding: 1.25rem 1.25rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Tag pill */
+    .menu-tag {
+      display: inline-block;
+      background: var(--soft-gold);
+      color: var(--brown-mid);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: .22rem .75rem;
+      border-radius: 50px;
+      margin-bottom: .55rem;
+    }
+    .menu-tag.bundle { background: #e6f5e1; color: #3a6b1f; }
+    .menu-tag.free   { background: #e6f5e1; color: #3a6b1f; }
+    .menu-tag.hot    { background: #fde8d0; color: #c8722a; }
+    .menu-tag.ube    { background: #e6d5f5; color: #5a3a8a; }
+    .menu-tag.chill  { background: #d0eaf5; color: #1a5a8a; }
+    .menu-tag.bites  { background: #fff0d0; color: #9a5a10; }
+
+    /* Card title */
+    .menu-card-body h5 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      margin-bottom: .35rem;
+      line-height: 1.3;
+    }
+
+    /* Single price display */
+    .menu-price-single {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem;
+      color: var(--caramel);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: .2rem;
+    }
+    .menu-price-label {
+      font-size: .73rem;
+      color: var(--brown-mid);
+      opacity: .65;
+      margin-bottom: .9rem;
+      font-weight: 600;
+    }
+
+    /* Card footer row */
+    .menu-card-footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+
+    /* Small order button */
+    .btn-order {
+      background: var(--caramel);
+      color: #fff;
+      font-weight: 700;
+      font-size: .82rem;
+      border: none;
+      padding: .45rem 1.1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+      white-space: nowrap;
+    }
+    .btn-order:hover { background: var(--gold); color: var(--brown-dark); transform: translateY(-1px); }
+
+    /* Larger price on right-aligned cards (chill/drinks) */
     .menu-price { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--caramel); font-weight:700; }
-    .menu-tag { display:inline-block; background:var(--soft-gold); color:var(--brown-mid); font-size:.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:.2rem .7rem; border-radius:50px; margin-bottom:.6rem; }
-    .menu-tag.bundle { background:#e6f5e1; color:#3a6b1f; }
-    .menu-tag.free { background:#e6f5e1; color:#3a6b1f; }
-    .menu-tag.hot { background:#fde8d0; color:#c8722a; }
-    .menu-tag.ube { background:#e6d5f5; color:#5a3a8a; }
-    .menu-tag.chill { background:#d0eaf5; color:#1a5a8a; }
-
-    /* price variants */
-    .price-variants { display:flex; gap:.75rem; flex-wrap:wrap; margin-bottom:.75rem; }
-    .price-variant { background:var(--cream); border:1px solid #e8d5bb; border-radius:10px; padding:.3rem .7rem; font-size:.82rem; text-align:center; }
-    .price-variant span { display:block; font-size:.68rem; color:var(--brown-mid); opacity:.7; }
-    .price-variant strong { font-family:'Playfair Display',serif; color:var(--caramel); font-size:1rem; }
 
     /* DIPPING */
     .dip-card { background:#fff; border-radius:20px; box-shadow:0 6px 30px rgba(58,18,5,.10); padding:1.5rem; max-width:480px; margin:0 auto; }
@@ -221,6 +306,9 @@
       <button class="menu-tab-btn" onclick="showMenuPanel('chill', this)">
         <i class="bi bi-snow"></i> Churro-Chill
       </button>
+      <button class="menu-tab-btn" onclick="showMenuPanel('bites', this)">
+        <i class="bi bi-grid-3x3-gap-fill"></i> Bites
+      </button>
       <button class="menu-tab-btn" onclick="showMenuPanel('bundles', this)">
         <i class="bi bi-box-seam"></i> Bundles
       </button>
@@ -235,154 +323,250 @@
       </button>
     </div>
 
-    <!-- CHURROS PANEL -->
+    <!-- ══ CHURROS PANEL ══ -->
     <div class="menu-panel active" id="panel-churros">
-      <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Available as 1pc, Bites, or Bundle (6pcs)</p>
+      <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Classic hand-crafted churros — one price, pure flavor.</p>
       <div class="row g-4">
+
         <div class="col-sm-6 col-lg-3">
           <div class="menu-card">
-            <img src="class.jpg" class="menu-card-img" alt="Churinga"/>
+            <div class="menu-card-img-wrap">
+              <img src="class.jpg" class="menu-card-img" alt="Churinga"/>
+            </div>
             <div class="menu-card-body">
               <span class="menu-tag">Moringa</span>
-              <h5 class="mb-2">Churinga</h5>
-              <div class="price-variants">
-                <div class="price-variant"><span>1pc</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bites</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bundle</span><strong>&#8369;99</strong></div>
+              <h5>Churinga</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per piece</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
-              <a href="#contact" class="btn btn-gold btn-sm w-100">Order</a>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 col-lg-3">
           <div class="menu-card">
-            <img src="filled.jpg" class="menu-card-img" alt="Chusquash"/>
+            <div class="menu-card-img-wrap">
+              <img src="filled.jpg" class="menu-card-img" alt="Chusquash"/>
+            </div>
             <div class="menu-card-body">
               <span class="menu-tag">Squash</span>
-              <h5 class="mb-2">Chusquash</h5>
-              <div class="price-variants">
-                <div class="price-variant"><span>1pc</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bites</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bundle</span><strong>&#8369;99</strong></div>
+              <h5>Chusquash</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per piece</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
-              <a href="#contact" class="btn btn-gold btn-sm w-100">Order</a>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 col-lg-3">
           <div class="menu-card">
-            <img src="churro.jpg" class="menu-card-img" alt="Chuweetpotato"/>
+            <div class="menu-card-img-wrap">
+              <img src="churro.jpg" class="menu-card-img" alt="Chuweetpotato"/>
+            </div>
             <div class="menu-card-body">
               <span class="menu-tag">Sweet Potato</span>
-              <h5 class="mb-2">Chuweetpotato</h5>
-              <div class="price-variants">
-                <div class="price-variant"><span>1pc</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bites</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bundle</span><strong>&#8369;99</strong></div>
+              <h5>Chuweetpotato</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per piece</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
-              <a href="#contact" class="btn btn-gold btn-sm w-100">Order</a>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 col-lg-3">
           <div class="menu-card">
-            <img src="class.jpg" class="menu-card-img" alt="Chubanana"/>
+            <div class="menu-card-img-wrap">
+              <img src="class.jpg" class="menu-card-img" alt="Chubanana"/>
+            </div>
             <div class="menu-card-body">
               <span class="menu-tag">Banana</span>
-              <h5 class="mb-2">Chubanana</h5>
-              <div class="price-variants">
-                <div class="price-variant"><span>1pc</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bites</span><strong>&#8369;29</strong></div>
-                <div class="price-variant"><span>Bundle</span><strong>&#8369;99</strong></div>
+              <h5>Chubanana</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per piece</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
-              <a href="#contact" class="btn btn-gold btn-sm w-100">Order</a>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
-    <!-- CHURRO-CHILL PANEL -->
+    <!-- ══ CHURRO-CHILL PANEL ══ -->
     <div class="menu-panel" id="panel-chill">
       <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Churros paired with your choice of I Scream!</p>
       <div class="row g-4 justify-content-center">
+
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag chill">Churro-Chill</span>
-              <h5 class="mb-2">Churros w/ Tsokolat I Scream!</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Freshly fried churro paired with rich chocolate ice cream.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Churros w/ Tsokolat I Scream!</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;flex:1;">Freshly fried churro paired with rich chocolate ice cream.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;39</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag chill">Churro-Chill</span>
-              <h5 class="mb-2">Churros w/ Vanelya I Scream!</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Freshly fried churro paired with creamy vanilla ice cream.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Churros w/ Vanelya I Scream!</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;flex:1;">Freshly fried churro paired with creamy vanilla ice cream.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;39</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag ube">Churro-Chill</span>
-              <h5 class="mb-2">Churros w/ Ubeybe I Scream!</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Freshly fried churro paired with sweet ube ice cream.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Churros w/ Ubeybe I Scream!</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;flex:1;">Freshly fried churro paired with sweet ube ice cream.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;39</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
-    <!-- BUNDLES PANEL -->
+    <!-- ══ BITES PANEL (new) ══ -->
+    <div class="menu-panel" id="panel-bites">
+      <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Mini churro bites — same great flavors, fun bite-sized pieces!</p>
+      <div class="row g-4 justify-content-center">
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <div class="menu-card-img-wrap">
+              <img src="class.jpg" class="menu-card-img" alt="Churinga Bites"/>
+            </div>
+            <div class="menu-card-body">
+              <span class="menu-tag bites">Moringa · Bites</span>
+              <h5>Churinga Bites</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per serving</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <div class="menu-card-img-wrap">
+              <img src="filled.jpg" class="menu-card-img" alt="Chusquash Bites"/>
+            </div>
+            <div class="menu-card-body">
+              <span class="menu-tag bites">Squash · Bites</span>
+              <h5>Chusquash Bites</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per serving</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <div class="menu-card-img-wrap">
+              <img src="churro.jpg" class="menu-card-img" alt="Chuweetpotato Bites"/>
+            </div>
+            <div class="menu-card-body">
+              <span class="menu-tag bites">Sweet Potato · Bites</span>
+              <h5>Chuweetpotato Bites</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per serving</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="menu-card">
+            <div class="menu-card-img-wrap">
+              <img src="class.jpg" class="menu-card-img" alt="Chubanana Bites"/>
+            </div>
+            <div class="menu-card-body">
+              <span class="menu-tag bites">Banana · Bites</span>
+              <h5>Chubanana Bites</h5>
+              <div class="menu-price-single">&#8369;29</div>
+              <div class="menu-price-label">per serving</div>
+              <div class="menu-card-footer">
+                <a href="#contact" class="btn-order">Order Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ BUNDLES PANEL ══ -->
     <div class="menu-panel" id="panel-bundles">
       <div class="row g-4 justify-content-center">
+
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
-            <img src="churro.jpg" class="menu-card-img" alt="Chubitescope"/>
+            <div class="menu-card-img-wrap">
+              <img src="churro.jpg" class="menu-card-img" alt="Chubitescope"/>
+            </div>
             <div class="menu-card-body">
               <span class="menu-tag bundle">Bundle</span>
-              <h5 class="mb-1">Chubitescope</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Bites in a cup — mini churro bites served in a cup, perfect for sharing or snacking on the go.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Chubitescope</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Bites in a cup — mini churro bites served in a cup, perfect for sharing or snacking on the go.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;29</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
+
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
-            <img src="filled.jpg" class="menu-card-img" alt="Chusixcope"/>
+            <div class="menu-card-img-wrap">
+              <img src="filled.jpg" class="menu-card-img" alt="Chusixcope"/>
+            </div>
             <div class="menu-card-body">
               <span class="menu-tag bundle">Bundle</span>
-              <h5 class="mb-1">Chusixcope</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">6 pcs churros of your chosen flavor packed in a box — great for groups, events, or gifting.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Chusixcope</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">6 pcs churros of your chosen flavor packed in a box — great for groups, events, or gifting.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;99</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
-    <!-- COMPLIMENTARY PANEL -->
+    <!-- ══ COMPLIMENTARY PANEL ══ -->
     <div class="menu-panel" id="panel-complimentary">
       <div class="row g-4 justify-content-center">
         <div class="col-sm-6 col-lg-3">
@@ -412,7 +596,7 @@
       </div>
     </div>
 
-    <!-- DIPPINGS PANEL -->
+    <!-- ══ DIPPINGS PANEL ══ -->
     <div class="menu-panel" id="panel-dippings">
       <div class="dip-card">
         <div class="dip-row">
@@ -437,21 +621,20 @@
       <p class="text-center mt-4" style="font-size:.85rem;color:var(--brown-mid);opacity:.7;">All dipping sauces are house-made fresh daily.</p>
     </div>
 
-    <!-- DRINKS PANEL -->
+    <!-- ══ DRINKS PANEL ══ -->
     <div class="menu-panel" id="panel-drinks">
       <div class="row g-4 justify-content-center">
 
-        <!-- Chocolate Drinks -->
         <div class="col-12"><h5 class="text-center" style="color:var(--brown-mid);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Chocolate Drinks</h5></div>
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag hot">Hot</span>
-              <h5 class="mb-1">Hot Chocolate</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Warm, rich, and comforting.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Hot Chocolate</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Warm, rich, and comforting.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;55</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
@@ -460,27 +643,26 @@
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag">Cold</span>
-              <h5 class="mb-1">Cold Chocolate</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Chilled chocolate milk drink.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Cold Chocolate</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Chilled chocolate milk drink.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;65</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Fruit Juice -->
         <div class="col-12"><h5 class="text-center" style="color:var(--brown-mid);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Fruit Juice</h5></div>
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag">Juice</span>
-              <h5 class="mb-1">Mango Juice</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Sweet and tropical Philippine mango.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Mango Juice</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Sweet and tropical Philippine mango.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;59</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
@@ -489,27 +671,26 @@
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag">Juice</span>
-              <h5 class="mb-1">Avocado Juice</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Creamy and refreshing avocado blend.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Avocado Juice</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Creamy and refreshing avocado blend.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;59</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Fruity Soda -->
         <div class="col-12"><h5 class="text-center" style="color:var(--brown-mid);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Fruity Soda</h5></div>
         <div class="col-sm-6 col-lg-4">
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag chill">Soda</span>
-              <h5 class="mb-1">Blueberry Soda</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Fizzy and fruity blueberry refresher.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Blueberry Soda</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Fizzy and fruity blueberry refresher.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;55</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
@@ -518,11 +699,11 @@
           <div class="menu-card">
             <div class="menu-card-body">
               <span class="menu-tag chill">Soda</span>
-              <h5 class="mb-1">Green Apple Soda</h5>
-              <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:.75rem;">Crisp and tangy green apple fizz.</p>
-              <div class="d-flex justify-content-between align-items-center">
+              <h5>Green Apple Soda</h5>
+              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Crisp and tangy green apple fizz.</p>
+              <div class="menu-card-footer">
                 <span class="menu-price">&#8369;55</span>
-                <a href="#contact" class="btn btn-gold btn-sm">Order</a>
+                <a href="#contact" class="btn-order">Order Now</a>
               </div>
             </div>
           </div>
