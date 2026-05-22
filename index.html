@@ -1,838 +1,933 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChurroScope</title>
-  <meta name="description" content="ChurroScope – hand-crafted churros with delicious dipping sauces.">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChurroScope – Every Bite Counts</title>
+  <meta name="description" content="ChurroScope – vegetable-infused, hand-crafted churros. Healthy, creative, and irresistibly delicious."/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,700;1,9..144,900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
   <style>
     :root {
-      --caramel: #c8722a;
-      --gold: #e6a830;
-      --cream: #fdf5e6;
-      --brown-dark: #3b1f0e;
-      --brown-mid: #6b3a1f;
-      --chocolate: #4a2409;
-      --soft-gold: #f5d78e;
+      /* ── PALETTE FROM IMAGE ── */
+      --choc:        #5c1f0a;   /* dark chocolate brown  */
+      --choc-deep:   #3d1206;   /* even deeper for darkest elements */
+      --terra:       #a85a28;   /* warm terracotta / caramel */
+      --terra-light: #c4743a;   /* lighter terracotta for hover */
+      --sage:        #8a9068;   /* muted sage / olive green */
+      --sage-light:  #a8ac80;   /* lighter sage */
+      --sage-pale:   #e8e8d0;   /* very pale sage tint */
+      --parch:       #e8ddb0;   /* warm parchment / cream */
+      --parch-dark:  #d8ca90;   /* slightly deeper parchment */
+      --parch-light: #f5f0dc;   /* lightest cream */
+      --white:       #fffdf5;
+
+      /* functional */
+      --text-dark:   #2a0e02;
+      --text-body:   #3d2010;
+      --text-muted:  #7a6040;
+      --shadow-sm:   0 4px 20px rgba(92,31,10,.12);
+      --shadow-md:   0 10px 40px rgba(92,31,10,.18);
+      --shadow-lg:   0 20px 60px rgba(92,31,10,.24);
+      --radius-xl:   28px;
+      --radius-lg:   18px;
+      --radius-md:   12px;
+      --radius-sm:   8px;
+      --ease:        cubic-bezier(.25,.8,.25,1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--brown-dark); overflow-x: hidden; }
-    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--parch-light); color: var(--text-body); overflow-x: hidden; line-height: 1.6; }
+    h1,h2,h3,h4,h5 { font-family: 'Fraunces', serif; line-height: 1.1; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; }
 
-    /* NAVBAR */
-    .navbar { background: var(--chocolate) !important; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.35); }
-    .navbar-brand { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--gold) !important; display: flex; align-items: center; gap: .55rem; }
-    .navbar-brand span { color: #fff; }
-    .nav-link { color: #f5d78e !important; font-weight: 600; transition: color .2s; margin: 0 .25rem; }
-    .nav-link:hover, .nav-link.active { color: var(--gold) !important; }
-    .navbar-toggler { border-color: var(--gold); }
-    .navbar-toggler-icon { filter: invert(80%) sepia(50%) saturate(400%) hue-rotate(10deg); }
-    .churro-logo { width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--parch-light); }
+    ::-webkit-scrollbar-thumb { background: var(--terra); border-radius: 10px; }
 
-    /* BUTTONS */
-    .btn-gold { background: var(--gold); color: var(--brown-dark); font-weight: 700; border: none; padding: .75rem 2rem; border-radius: 50px; font-size: 1rem; transition: transform .2s, box-shadow .2s; }
-    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(230,168,48,.45); color: var(--brown-dark); }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
 
-    /* HERO */
-    #home {
-      min-height: 100vh;
-      background: linear-gradient(160deg, rgba(58,18,5,.92) 0%, rgba(198,108,38,.7) 60%, rgba(230,168,48,.4) 100%);
-      display: flex; align-items: center; position: relative; overflow: hidden;
+    /* ── EYEBROW ── */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: .55rem;
+      font-size: .72rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--terra); font-family: 'DM Sans', sans-serif;
     }
-    #home::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:80px; background:var(--cream); clip-path:ellipse(55% 100% at 50% 100%); }
-    .hero-title { font-size:clamp(3rem,8vw,5.5rem); color:#fff; line-height:1.05; font-style:italic; animation:fadeDown .8s .1s ease both; text-shadow:0 4px 30px rgba(0,0,0,.5); }
-    .hero-sub { color:#fdf5e6cc; font-size:1.1rem; max-width:520px; margin:1.2rem 0 2rem; line-height:1.75; animation:fadeDown .9s .2s ease both; }
-    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+    .eyebrow::before { content:''; width:24px; height:2px; background:currentColor; flex-shrink:0; }
+    .eyebrow.on-dark { color: var(--parch); }
+    .eyebrow.on-dark::before { background: var(--parch); }
+    .section-title { font-size: clamp(2rem,4.5vw,3rem); color: var(--choc); }
+    .section-title.light { color: var(--parch); }
+    .title-rule { width:48px; height:3px; background:linear-gradient(90deg,var(--terra),var(--sage)); border-radius:4px; margin:.8rem 0 2rem; }
+    .title-rule.center { margin:.8rem auto 2.5rem; }
 
-    /* SECTION */
-    .section-label { font-size:.78rem; letter-spacing:3px; text-transform:uppercase; color:var(--caramel); font-weight:700; margin-bottom:.5rem; }
-    .section-title { font-size:clamp(1.9rem,4vw,2.7rem); color:var(--brown-dark); }
-    .divider { width:60px; height:4px; background:linear-gradient(90deg,var(--caramel),var(--gold)); border-radius:4px; margin:.75rem auto 2rem; }
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(34px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.up { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;} .d4{transition-delay:.4s;}
 
-    /* ABOUT */
-    #about { padding:100px 0; }
-    .about-img { border-radius:20px; overflow:hidden; box-shadow:18px 18px 0 var(--soft-gold); }
-    .about-img img { width:100%; height:420px; object-fit:cover; display:block; }
-    .about-feature { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.25rem; }
-    .about-icon { width:46px; height:46px; background:linear-gradient(135deg,var(--caramel),var(--gold)); color:#fff; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
-
-    /* MENU */
-    #menu { padding:100px 0; background:linear-gradient(180deg,#fdf5e6 0%,#f9ead2 100%); }
-    .menu-tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:2.5rem; }
-    .menu-tab-btn {
-      background:#fff; border:2px solid #e8d5bb; border-radius:50px;
-      padding:.5rem 1.4rem; font-size:.85rem; font-weight:700; color:var(--brown-mid);
-      cursor:pointer; transition:all .2s; font-family:'Nunito',sans-serif;
+    /* ══════════════ NAVBAR ══════════════ */
+    .navbar { position:fixed; top:0; left:0; right:0; z-index:900; padding:1.1rem 0; transition:all .4s var(--ease); }
+    .navbar.solid {
+      background: rgba(61,18,6,.96);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(232,221,176,.12);
+      padding:.75rem 0;
+    }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; }
+    .nav-brand {
+      display:flex; align-items:center; gap:.65rem;
+      font-family:'Fraunces',serif; font-size:1.45rem; font-weight:700; color:var(--parch);
+    }
+    .nav-brand img { width:38px; height:38px; object-fit:contain; }
+    .nav-brand em { color:rgba(232,221,176,.5); font-style:italic; font-weight:300; font-size:1rem; }
+    .nav-links { display:flex; align-items:center; gap:.15rem; list-style:none; }
+    .nav-links a { color:rgba(232,221,176,.75); font-size:.875rem; font-weight:500; padding:.45rem .85rem; border-radius:50px; transition:all .25s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--parch); background:rgba(168,90,40,.2); }
+    .nav-cart-btn {
       display:flex; align-items:center; gap:.4rem;
+      background:rgba(232,221,176,.1); border:1px solid rgba(232,221,176,.2);
+      color:rgba(232,221,176,.85); font-size:.85rem; font-weight:600;
+      padding:.45rem 1rem; border-radius:50px; cursor:pointer; transition:all .25s;
+      font-family:'DM Sans',sans-serif;
     }
-    .menu-tab-btn:hover { border-color:var(--caramel); color:var(--caramel); }
-    .menu-tab-btn.active { background:var(--caramel); border-color:var(--caramel); color:#fff; }
-    .menu-panel { display:none; animation: panelIn .3s ease; }
+    .nav-cart-btn:hover { background:rgba(168,90,40,.25); border-color:rgba(168,90,40,.5); color:var(--parch); }
+    .cart-badge { background:var(--terra); color:#fff; font-size:.65rem; font-weight:800; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .btn-nav-cta { background:linear-gradient(135deg,var(--terra),var(--terra-light)); color:#fff !important; font-weight:700 !important; font-size:.85rem !important; padding:.5rem 1.3rem !important; border-radius:50px; transition:all .25s; }
+    .btn-nav-cta:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(168,90,40,.45); background:rgba(0,0,0,0) !important; background:linear-gradient(135deg,var(--terra-light),var(--terra)) !important; }
+    .burger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:.3rem; }
+    .burger span { width:22px; height:2px; background:var(--parch); border-radius:4px; transition:all .3s; }
+
+    /* MOBILE MENU */
+    .mob-menu { display:none; position:fixed; inset:0; background:rgba(61,18,6,.97); z-index:950; flex-direction:column; align-items:center; justify-content:center; gap:1.8rem; }
+    .mob-menu.open { display:flex; }
+    .mob-menu a { color:rgba(232,221,176,.8); font-size:2rem; font-family:'Fraunces',serif; font-weight:700; transition:color .2s; }
+    .mob-menu a:hover { color:var(--parch); }
+    .mob-close { position:absolute; top:1.5rem; right:1.5rem; background:rgba(255,255,255,.1); border:none; color:#fff; width:44px; height:44px; border-radius:50%; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; }
+
+    /* ══════════════ HERO ══════════════ */
+    #home { min-height:100vh; display:flex; align-items:center; background:var(--choc-deep); position:relative; overflow:hidden; }
+    .hero-bg-img { position:absolute; inset:0; background:url('new7.jpg') center/cover no-repeat; opacity:.15; animation:hZoom 14s ease-in-out infinite alternate; }
+    @keyframes hZoom { from{transform:scale(1)} to{transform:scale(1.08)} }
+    .hero-grad {
+      position:absolute; inset:0;
+      background: radial-gradient(ellipse 65% 80% at 75% 50%, rgba(168,90,40,.22) 0%, transparent 60%),
+                  linear-gradient(150deg, rgba(40,10,2,.96) 0%, rgba(61,18,6,.88) 55%, rgba(92,31,10,.7) 100%);
+    }
+    /* texture grain */
+    .hero-grain {
+      position:absolute; inset:0; opacity:.035;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:200px;
+    }
+    /* decorative arcs */
+    .hero-arcs { position:absolute; right:-100px; top:50%; transform:translateY(-50%); width:700px; height:700px; opacity:.05; pointer-events:none; }
+    .hero-arcs circle { fill:none; stroke:var(--parch); }
+    /* floating particles */
+    .hero-particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .hparticle { position:absolute; border-radius:50%; background:radial-gradient(circle,var(--parch) 0%,transparent 70%); animation:pfloat linear infinite; opacity:0; }
+    @keyframes pfloat { 0%{opacity:0;transform:translateY(0) scale(1)} 10%{opacity:.5} 90%{opacity:.1} 100%{opacity:0;transform:translateY(-120vh) scale(.3)} }
+    /* sage stripe accent */
+    .hero-stripe { position:absolute; left:0; right:0; bottom:0; height:6px; background:linear-gradient(90deg,var(--sage),var(--terra),var(--sage)); opacity:.6; z-index:4; }
+
+    .hero-content { position:relative; z-index:2; padding:140px 0 100px; }
+    .hero-pill {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:rgba(138,144,104,.15); border:1px solid rgba(138,144,104,.35);
+      color:var(--sage-light); font-size:.74rem; font-weight:700;
+      letter-spacing:2.5px; text-transform:uppercase;
+      padding:.38rem 1rem; border-radius:50px; margin-bottom:1.6rem;
+      animation:fadeUp .8s .1s both;
+    }
+    .hero-pill span { width:6px; height:6px; border-radius:50%; background:var(--terra-light); display:inline-block; }
+    .hero-title { font-size:clamp(3.5rem,9vw,6.5rem); color:var(--parch); font-weight:900; line-height:.95; margin-bottom:1.4rem; animation:fadeUp .8s .2s both; }
+    .hero-title .hl { color:var(--terra-light); display:block; font-style:italic; position:relative; }
+    .hero-title .hl::after { content:''; position:absolute; bottom:4px; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--sage),transparent); border-radius:4px; }
+    .hero-sub { color:rgba(232,221,176,.65); font-size:1rem; max-width:500px; line-height:1.85; margin-bottom:2.5rem; animation:fadeUp .8s .35s both; }
+    .hero-btns { display:flex; gap:1rem; flex-wrap:wrap; animation:fadeUp .8s .45s both; }
+    .btn-terra {
+      background:linear-gradient(135deg,var(--terra),var(--terra-light));
+      color:#fff; font-weight:700; font-size:.95rem;
+      padding:.9rem 2.2rem; border-radius:50px; border:none; cursor:pointer;
+      transition:all .3s; display:inline-flex; align-items:center; gap:.5rem;
+      box-shadow:0 4px 24px rgba(168,90,40,.4);
+    }
+    .btn-terra:hover { transform:translateY(-3px); box-shadow:0 10px 35px rgba(168,90,40,.55); color:#fff; }
+    .btn-sage {
+      background:transparent; border:2px solid rgba(138,144,104,.5);
+      color:var(--sage-light); font-weight:600; font-size:.95rem;
+      padding:.9rem 2.2rem; border-radius:50px; cursor:pointer;
+      transition:all .3s; display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-sage:hover { background:rgba(138,144,104,.15); border-color:var(--sage-light); color:var(--parch); }
+    .hero-stats { display:flex; gap:2.5rem; margin-top:3.5rem; flex-wrap:wrap; animation:fadeUp .8s .55s both; }
+    .hstat strong { display:block; font-family:'Fraunces',serif; font-size:2rem; font-weight:900; color:var(--terra-light); line-height:1; }
+    .hstat span { font-size:.74rem; color:rgba(232,221,176,.5); letter-spacing:.5px; font-weight:500; margin-top:.15rem; display:block; }
+    .hstat-div { width:1px; background:rgba(232,221,176,.12); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .hero-wave { position:absolute; bottom:-1px; left:0; right:0; z-index:3; }
+    .hero-wave svg { display:block; }
+
+    /* ══════════════ ABOUT ══════════════ */
+    #about { background:#fff; padding:100px 0; }
+    .about-grid { display:grid; grid-template-columns:1fr 1.1fr; gap:5rem; align-items:start; }
+    .about-visual { position:relative; }
+    .about-main-img { width:100%; height:460px; object-fit:cover; border-radius:var(--radius-xl); box-shadow:var(--shadow-md); }
+    /* sage corner accent */
+    .about-corner { position:absolute; top:-18px; left:-18px; width:80px; height:80px; border:3px solid var(--sage); border-radius:var(--radius-lg); opacity:.4; }
+    .about-corner2 { position:absolute; bottom:-18px; right:-18px; width:60px; height:60px; background:var(--terra); border-radius:50%; opacity:.25; }
+    .about-badge-ring {
+      position:absolute; bottom:-22px; right:-22px;
+      width:110px; height:110px; border-radius:50%;
+      background:linear-gradient(135deg,var(--terra),var(--terra-light));
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 10px 36px rgba(168,90,40,.45);
+    }
+    .about-badge-ring span { font-size:2.4rem; }
+
+    /* acrostic */
+    .acrostic-grid { display:flex; flex-direction:column; gap:.4rem; margin:1.5rem 0 2rem; }
+    .acro-row { display:flex; align-items:flex-start; gap:.8rem; padding:.55rem .75rem; border-radius:var(--radius-md); transition:background .25s; cursor:default; }
+    .acro-row:hover { background:var(--parch-light); }
+    .acro-letter {
+      width:32px; height:32px; flex-shrink:0; border-radius:var(--radius-sm);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Fraunces',serif; font-size:1rem; font-weight:900; color:#fff;
+    }
+    .al-choc { background:var(--choc); }
+    .al-terra { background:linear-gradient(135deg,var(--terra),var(--terra-light)); }
+    .al-sage  { background:linear-gradient(135deg,var(--sage),var(--sage-light)); color:var(--text-dark); }
+    .acro-text strong { font-size:.88rem; color:var(--choc); display:block; line-height:1.3; }
+    .acro-text span { font-size:.76rem; color:var(--text-muted); }
+
+    .vision-box {
+      border-radius:var(--radius-lg); padding:1.3rem 1.5rem; margin-bottom:1.5rem;
+    }
+    .vision-box.choc { background:var(--choc); color:var(--parch); }
+    .vision-box.parch { background:var(--parch-light); border:1px solid var(--parch-dark); }
+    .vision-box h5 { font-size:1.05rem; margin-bottom:.45rem; }
+    .vision-box.choc h5 { color:var(--terra-light); }
+    .vision-box.parch h5 { color:var(--choc); }
+    .vision-box p { font-size:.87rem; line-height:1.75; opacity:.85; }
+
+    /* ══════════════ STATS BAND ══════════════ */
+    .stats-band { background:linear-gradient(135deg,var(--choc),var(--terra)); padding:4rem 0; position:relative; overflow:hidden; }
+    .stats-band::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") center/200px; opacity:.04; }
+    .stats-band-inner { display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; text-align:center; position:relative; z-index:1; }
+    .sband-item strong { display:block; font-family:'Fraunces',serif; font-size:2.8rem; font-weight:900; color:var(--parch); line-height:1; }
+    .sband-item span { font-size:.76rem; color:rgba(232,221,176,.65); font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-top:.4rem; display:block; }
+    /* sage line separator */
+    .sband-item + .sband-item { border-left:1px solid rgba(138,144,104,.3); }
+
+    /* ══════════════ MENU ══════════════ */
+    #menu { background:var(--parch-light); padding:100px 0; }
+    .menu-tabs { display:flex; gap:.55rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.5rem; }
+    .tab-btn {
+      display:flex; align-items:center; gap:.4rem;
+      background:#fff; border:2px solid var(--parch-dark);
+      color:var(--text-muted); font-size:.82rem; font-weight:700;
+      padding:.5rem 1.2rem; border-radius:50px; cursor:pointer;
+      transition:all .25s; font-family:'DM Sans',sans-serif;
+    }
+    .tab-btn:hover { border-color:var(--terra); color:var(--terra); }
+    .tab-btn.active { background:var(--choc); border-color:var(--choc); color:var(--parch); }
+    .menu-panel { display:none; animation:panelIn .35s var(--ease); }
     .menu-panel.active { display:block; }
-    @keyframes panelIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes panelIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ── MENU CARDS (improved) ── */
-    .menu-card {
-      background: #fff;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(58,18,5,.08);
-      transition: transform .3s, box-shadow .3s;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(58,18,5,.16); }
+    /* cards */
+    .mgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
+    .mgrid.c3 { grid-template-columns:repeat(3,1fr); }
+    .mgrid.c2 { grid-template-columns:repeat(2,1fr); max-width:600px; margin:0 auto; }
+    .mcard { background:#fff; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); transition:all .35s var(--ease); display:flex; flex-direction:column; }
+    .mcard:hover { transform:translateY(-7px); box-shadow:var(--shadow-lg); }
+    .mcard-img { position:relative; overflow:hidden; height:170px; background:var(--parch-light); }
+    .mcard-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease); }
+    .mcard:hover .mcard-img img { transform:scale(1.07); }
+    .mbadge { position:absolute; top:10px; left:10px; font-size:.64rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:.22rem .72rem; border-radius:50px; }
+    .mb-choc   { background:var(--choc); color:var(--parch); }
+    .mb-terra  { background:var(--terra); color:#fff; }
+    .mb-sage   { background:var(--sage); color:#fff; }
+    .mb-parch  { background:var(--parch); color:var(--choc); }
+    .mb-sage-p { background:var(--sage-pale); color:var(--choc); }
+    .mcard-body { padding:1.2rem; display:flex; flex-direction:column; flex:1; }
+    .mcard-body h5 { font-size:1rem; color:var(--choc); margin-bottom:.3rem; }
+    .mcard-body p { font-size:.82rem; color:var(--text-muted); line-height:1.6; margin-bottom:.9rem; flex:1; }
+    .mcard-foot { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-top:auto; }
+    .mprice { font-family:'Fraunces',serif; font-size:1.4rem; color:var(--terra); font-weight:700; line-height:1; }
+    .mprice sub { font-size:.62rem; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-weight:500; display:block; }
+    .qty-row { display:flex; align-items:center; gap:.4rem; }
+    .qb { width:27px; height:27px; border-radius:50%; border:2px solid var(--terra); background:transparent; color:var(--terra); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:700; transition:all .2s; }
+    .qb:hover { background:var(--terra); color:#fff; }
+    .qn { font-weight:700; font-size:.88rem; min-width:16px; text-align:center; color:var(--choc); }
+    .btn-add { background:var(--choc); color:var(--parch); border:none; border-radius:50px; padding:.44rem 1.1rem; font-size:.78rem; font-weight:700; cursor:pointer; transition:all .25s; white-space:nowrap; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:.3rem; }
+    .btn-add:hover { background:var(--terra); color:#fff; transform:translateY(-1px); box-shadow:0 4px 16px rgba(168,90,40,.4); }
 
-    /* image wrapper with overlay badge */
-    .menu-card-img-wrap { position: relative; overflow: hidden; }
-    .menu-card-img {
-      height: 180px; object-fit: cover; width: 100%;
-      background: #e8d5bb;
-      display: block;
-      transition: transform .4s ease;
-    }
-    .menu-card:hover .menu-card-img { transform: scale(1.05); }
-
-    .menu-card-body {
-      padding: 1.25rem 1.25rem 1.4rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    /* Tag pill */
-    .menu-tag {
-      display: inline-block;
-      background: var(--soft-gold);
-      color: var(--brown-mid);
-      font-size: .68rem;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      padding: .22rem .75rem;
-      border-radius: 50px;
-      margin-bottom: .55rem;
-    }
-    .menu-tag.bundle { background: #e6f5e1; color: #3a6b1f; }
-    .menu-tag.free   { background: #e6f5e1; color: #3a6b1f; }
-    .menu-tag.hot    { background: #fde8d0; color: #c8722a; }
-    .menu-tag.ube    { background: #e6d5f5; color: #5a3a8a; }
-    .menu-tag.chill  { background: #d0eaf5; color: #1a5a8a; }
-    .menu-tag.bites  { background: #fff0d0; color: #9a5a10; }
-
-    /* Card title */
-    .menu-card-body h5 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--brown-dark);
-      margin-bottom: .35rem;
-      line-height: 1.3;
-    }
-
-    /* Single price display */
-    .menu-price-single {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.55rem;
-      color: var(--caramel);
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: .2rem;
-    }
-    .menu-price-label {
-      font-size: .73rem;
-      color: var(--brown-mid);
-      opacity: .65;
-      margin-bottom: .9rem;
-      font-weight: 600;
-    }
-
-    /* Card footer row */
-    .menu-card-footer {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: .5rem;
-    }
-
-    /* Small order button */
-    .btn-order {
-      background: var(--caramel);
-      color: #fff;
-      font-weight: 700;
-      font-size: .82rem;
-      border: none;
-      padding: .45rem 1.1rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: background .2s, transform .2s;
-      white-space: nowrap;
-    }
-    .btn-order:hover { background: var(--gold); color: var(--brown-dark); transform: translateY(-1px); }
-
-    /* Larger price on right-aligned cards (chill/drinks) */
-    .menu-price { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--caramel); font-weight:700; }
-
-    /* DIPPING */
-    .dip-card { background:#fff; border-radius:20px; box-shadow:0 6px 30px rgba(58,18,5,.10); padding:1.5rem; max-width:480px; margin:0 auto; }
-    .dip-row { display:flex; align-items:center; gap:14px; padding:.75rem 0; border-bottom:1px solid #f0e4d0; }
+    /* dippings */
+    .dip-table { background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); overflow:hidden; max-width:500px; margin:0 auto; }
+    .dip-row { display:flex; align-items:center; gap:1rem; padding:1rem 1.4rem; border-bottom:1px solid var(--parch-light); }
     .dip-row:last-child { border-bottom:none; }
-    .dip-swatch { width:24px; height:24px; border-radius:50%; border:2px solid rgba(0,0,0,.08); flex-shrink:0; }
-    .dip-name { font-weight:700; color:var(--brown-dark); font-size:.95rem; }
-    .dip-note { font-size:.8rem; color:var(--brown-mid); opacity:.7; }
-    .dip-price { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--caramel); font-weight:700; margin-left:auto; }
+    .dip-dot { width:22px; height:22px; border-radius:50%; border:2px solid rgba(0,0,0,.08); flex-shrink:0; }
+    .dip-info { flex:1; }
+    .dip-info strong { display:block; font-size:.93rem; color:var(--choc); }
+    .dip-info span { font-size:.76rem; color:var(--text-muted); }
+    .dip-price { font-family:'Fraunces',serif; font-size:1.1rem; color:var(--terra); font-weight:700; }
+    .btn-dip { background:var(--parch-light); color:var(--choc); border:1px solid var(--parch-dark); border-radius:50px; padding:.28rem .8rem; font-size:.74rem; font-weight:700; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; }
+    .btn-dip:hover { background:var(--terra); color:#fff; border-color:var(--terra); }
 
-    /* ICE CREAM */
-    .ic-card { background:#fff; border-radius:20px; box-shadow:0 6px 30px rgba(58,18,5,.10); padding:1.75rem 1.4rem; text-align:center; transition:transform .3s; height:100%; }
-    .ic-card:hover { transform:translateY(-5px); }
-    .ic-emoji { font-size:2.2rem; margin-bottom:.75rem; display:block; }
+    /* ice cream */
+    .ic-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; max-width:680px; margin:0 auto; }
+    .ic-card { background:#fff; border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; box-shadow:var(--shadow-sm); transition:all .3s; border-bottom:4px solid transparent; }
+    .ic-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-md); border-color:var(--sage); }
+    .ic-emoji { font-size:2.5rem; margin-bottom:.75rem; display:block; }
+    .ic-card h5 { font-size:1rem; color:var(--choc); margin-bottom:.3rem; }
+    .ic-card p { font-size:.82rem; color:var(--text-muted); margin-bottom:.8rem; }
+    .badge-free { background:var(--sage-pale); color:var(--choc); font-size:.66rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:.22rem .72rem; border-radius:50px; border:1px solid rgba(138,144,104,.3); }
 
-    /* GALLERY */
-    #gallery { padding:80px 0; background:#f9ead2; }
-    .insta-grid img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:12px; transition:transform .3s,filter .3s; background:#e8d5bb; }
-    .insta-grid img:hover { transform:scale(1.04); filter:brightness(1.05) saturate(1.2); }
+    /* drinks */
+    .drinks-cat-label { font-size:.74rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--terra); text-align:center; margin-bottom:1.25rem; display:flex; align-items:center; gap:1rem; justify-content:center; }
+    .drinks-cat-label::before, .drinks-cat-label::after { content:''; flex:1; max-width:60px; height:1px; background:var(--parch-dark); }
 
-    /* FOOTER */
-    footer { background:var(--chocolate); color:#f5d78e; padding:3rem 0 1.5rem; }
-    footer h5 { color:var(--gold); font-family:'Playfair Display',serif; margin-bottom:1rem; }
-    footer a { color:#f5d78e; text-decoration:none; transition:color .2s; }
-    footer a:hover { color:var(--gold); }
-    .footer-social a { width:38px; height:38px; background:rgba(255,255,255,.1); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-right:.4rem; transition:background .2s,color .2s; }
-    .footer-social a:hover { background:var(--gold); color:var(--brown-dark); }
-    .footer-bottom { border-top:1px solid rgba(255,255,255,.1); padding-top:1.25rem; margin-top:2rem; font-size:.85rem; color:rgba(245,215,142,.55); }
+    /* ══════════════ CATERING ══════════════ */
+    #catering { padding:100px 0; background:var(--choc-deep); position:relative; overflow:hidden; }
+    #catering::before { content:''; position:absolute; inset:0; background:url('new7.jpg') center/cover no-repeat; opacity:.05; }
+    /* decorative sage band on top */
+    #catering::after { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,var(--sage),var(--terra),var(--sage)); }
+    .cat-types { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:4rem; position:relative; z-index:1; }
+    .cat-card {
+      background:rgba(232,221,176,.05); border:1px solid rgba(232,221,176,.1);
+      border-radius:var(--radius-lg); padding:1.75rem 1.25rem; text-align:center;
+      transition:all .35s; backdrop-filter:blur(8px); position:relative; overflow:hidden;
+    }
+    .cat-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--sage),var(--terra)); transform:scaleX(0); transition:transform .35s; }
+    .cat-card:hover::after { transform:scaleX(1); }
+    .cat-card:hover { background:rgba(232,221,176,.09); transform:translateY(-5px); }
+    .cat-card i { font-size:2rem; color:var(--terra-light); margin-bottom:.9rem; display:block; }
+    .cat-card h6 { color:var(--parch); font-size:.97rem; font-weight:700; margin-bottom:.35rem; }
+    .cat-card p { font-size:.8rem; color:rgba(232,221,176,.5); line-height:1.6; }
+    .inquiry-wrap {
+      background:rgba(232,221,176,.05); border:1px solid rgba(232,221,176,.12);
+      border-radius:var(--radius-xl); padding:2.5rem 3rem;
+      backdrop-filter:blur(14px); max-width:740px; margin:0 auto; position:relative; z-index:1;
+    }
+    .inquiry-wrap h4 { color:var(--parch); font-family:'Fraunces',serif; font-size:1.8rem; text-align:center; margin-bottom:1.75rem; }
+    .fg { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .ff { display:flex; flex-direction:column; }
+    .ff.full { grid-column:1/-1; }
+    .ff label { font-size:.72rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:rgba(232,221,176,.4); margin-bottom:.45rem; }
+    .finput { background:rgba(232,221,176,.06); border:1px solid rgba(232,221,176,.14); color:var(--parch); border-radius:var(--radius-md); padding:.72rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; transition:all .25s; }
+    .finput::placeholder { color:rgba(232,221,176,.28); }
+    .finput:focus { outline:none; border-color:var(--terra-light); background:rgba(232,221,176,.1); }
+    select.finput option { background:var(--choc-deep); }
 
-    @media(max-width:768px){ .hero-title{font-size:3rem;} #home::after{height:50px;} .about-img{margin-bottom:2.5rem;} }
+    /* ══════════════ REVIEWS ══════════════ */
+    #reviews { background:#fff; padding:100px 0; }
+    .rev-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.75rem; }
+    .rcard { background:var(--parch-light); border-radius:var(--radius-lg); padding:2rem; position:relative; overflow:hidden; transition:all .35s; border:1px solid transparent; border-bottom:4px solid var(--parch-dark); }
+    .rcard::before { content:'\201C'; font-family:'Fraunces',serif; font-size:7rem; color:var(--parch-dark); position:absolute; top:-.8rem; left:.8rem; line-height:1; pointer-events:none; }
+    .rcard:hover { transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:var(--sage); border-bottom-color:var(--terra); }
+    .r-stars { color:var(--terra); font-size:.9rem; letter-spacing:2px; margin-bottom:.9rem; }
+    .r-text { position:relative; z-index:1; font-size:.9rem; color:var(--text-muted); line-height:1.8; margin-bottom:1.5rem; }
+    .r-author { display:flex; align-items:center; gap:.75rem; }
+    .r-av { width:42px; height:42px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,var(--choc),var(--terra)); display:flex; align-items:center; justify-content:center; color:var(--parch); font-family:'Fraunces',serif; font-size:1rem; font-weight:700; }
+    .r-name { font-weight:700; font-size:.9rem; color:var(--choc); }
+    .r-role { font-size:.75rem; color:var(--text-muted); }
+
+    /* ══════════════ GALLERY ══════════════ */
+    #gallery { background:var(--parch-light); padding:80px 0; }
+    .gal-grid { display:grid; grid-template-columns:repeat(6,1fr); grid-template-rows:200px 200px; gap:10px; }
+    .gi { position:relative; overflow:hidden; border-radius:var(--radius-md); }
+    .gi:nth-child(1) { grid-column:1/3; grid-row:1/3; border-radius:var(--radius-lg); }
+    .gi img { width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease); background:var(--parch); }
+    .gi:hover img { transform:scale(1.08); }
+    .gi-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(61,18,6,.75),transparent 55%); opacity:0; transition:opacity .35s; display:flex; align-items:flex-end; padding:1rem; }
+    .gi:hover .gi-overlay { opacity:1; }
+    .gi-overlay span { color:var(--parch); font-size:.78rem; font-weight:600; display:flex; align-items:center; gap:.35rem; }
+
+    /* ══════════════ CONTACT ══════════════ */
+    #contact { background:var(--sage-pale); padding:80px 0; }
+    .contact-grid { display:grid; grid-template-columns:1fr 1.15fr; gap:4rem; align-items:start; }
+    .c-items { display:flex; flex-direction:column; gap:1.25rem; }
+    .c-item { display:flex; align-items:flex-start; gap:1rem; }
+    .c-icon { width:48px; height:48px; border-radius:var(--radius-md); flex-shrink:0; background:linear-gradient(135deg,rgba(92,31,10,.1),rgba(168,90,40,.12)); border:1px solid rgba(92,31,10,.15); display:flex; align-items:center; justify-content:center; font-size:1.15rem; color:var(--terra); transition:all .3s; }
+    .c-item:hover .c-icon { background:linear-gradient(135deg,var(--choc),var(--terra)); color:var(--parch); }
+    .c-label { font-size:.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:.15rem; }
+    .c-val { font-size:.95rem; color:var(--choc); font-weight:500; }
+    .c-val a { color:var(--choc); transition:color .2s; }
+    .c-val a:hover { color:var(--terra); }
+    .socials { display:flex; gap:.55rem; margin-top:.5rem; }
+    .soc { width:40px; height:40px; border-radius:50%; background:rgba(92,31,10,.08); border:1px solid rgba(92,31,10,.15); color:var(--terra); display:flex; align-items:center; justify-content:center; font-size:.95rem; transition:all .25s; }
+    .soc:hover { background:var(--terra); color:#fff; transform:translateY(-2px); box-shadow:0 6px 16px rgba(168,90,40,.35); }
+    .cform-card { background:#fff; border-radius:var(--radius-xl); padding:2rem; box-shadow:var(--shadow-sm); border-top:4px solid var(--terra); }
+    .cform-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .cf { display:flex; flex-direction:column; }
+    .cf.full { grid-column:1/-1; }
+    .cf label { font-size:.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:.4rem; }
+    .cf input, .cf select, .cf textarea { border:2px solid var(--parch-dark); border-radius:var(--radius-md); padding:.72rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--text-body); background:#fff; transition:border-color .25s; }
+    .cf input:focus, .cf select:focus, .cf textarea:focus { outline:none; border-color:var(--terra); box-shadow:0 0 0 4px rgba(168,90,40,.08); }
+    .cf textarea { resize:vertical; min-height:110px; }
+    .btn-submit { width:100%; background:linear-gradient(135deg,var(--choc),var(--terra)); color:var(--parch); border:none; border-radius:50px; padding:.9rem; font-size:.95rem; font-weight:700; cursor:pointer; transition:all .3s; font-family:'DM Sans',sans-serif; margin-top:.25rem; }
+    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(92,31,10,.4); }
+
+    /* ══════════════ CART PANEL ══════════════ */
+    .cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .cart-overlay.open { opacity:1; pointer-events:all; }
+    .cart-panel { position:fixed; top:0; right:-420px; width:400px; max-width:95vw; height:100vh; background:#fff; z-index:1001; box-shadow:-10px 0 60px rgba(0,0,0,.25); transition:right .4s var(--ease); display:flex; flex-direction:column; }
+    .cart-panel.open { right:0; }
+    .cart-head { padding:1.4rem; background:var(--choc-deep); display:flex; align-items:center; justify-content:space-between; border-bottom:3px solid var(--terra); }
+    .cart-head h4 { color:var(--parch); font-family:'Fraunces',serif; font-size:1.35rem; }
+    .cart-x { background:rgba(255,255,255,.1); border:none; color:var(--parch); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .cart-x:hover { background:rgba(168,90,40,.4); }
+    .cart-body { flex:1; overflow-y:auto; padding:1.25rem; background:var(--parch-light); }
+    .cart-empty-s { text-align:center; padding:3rem 1rem; color:var(--text-muted); }
+    .cart-empty-s i { font-size:3rem; display:block; margin-bottom:1rem; color:var(--parch-dark); }
+    .citem { display:flex; gap:1rem; padding:.9rem 0; border-bottom:1px solid var(--parch-dark); align-items:center; }
+    .citem img { width:58px; height:58px; object-fit:cover; border-radius:10px; background:var(--parch); }
+    .citem-info { flex:1; }
+    .citem-info strong { font-size:.92rem; display:block; color:var(--choc); }
+    .citem-price { color:var(--terra); font-weight:700; font-size:.85rem; }
+    .citem-qty { display:flex; align-items:center; gap:.4rem; margin-top:.35rem; }
+    .ci-btn { width:24px; height:24px; border-radius:50%; border:1.5px solid var(--terra); background:transparent; color:var(--terra); cursor:pointer; font-size:.8rem; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .ci-btn:hover { background:var(--terra); color:#fff; }
+    .citem-rm { background:none; border:none; color:#ccc; cursor:pointer; font-size:.95rem; transition:color .2s; }
+    .citem-rm:hover { color:#e83e5a; }
+    .cart-foot { padding:1.25rem; border-top:1px solid var(--parch-dark); background:#fff; }
+    .cart-tot { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+    .cart-tot strong { font-size:1.05rem; color:var(--choc); }
+    .cart-tot span { font-family:'Fraunces',serif; font-size:1.55rem; color:var(--terra); font-weight:700; }
+    .checkout-btn { width:100%; background:linear-gradient(135deg,var(--choc),var(--terra)); color:var(--parch); border:none; border-radius:50px; padding:.9rem; font-size:.93rem; font-weight:700; cursor:pointer; transition:all .3s; font-family:'DM Sans',sans-serif; }
+    .checkout-btn:hover { box-shadow:0 8px 28px rgba(92,31,10,.4); transform:translateY(-1px); }
+
+    /* ══════════════ FOOTER ══════════════ */
+    footer { background:var(--choc-deep); color:rgba(232,221,176,.75); padding:4rem 0 0; }
+    /* sage accent top */
+    .footer-accent { height:5px; background:linear-gradient(90deg,var(--sage),var(--terra),var(--sage)); margin-bottom:4rem; }
+    .footer-grid { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:3rem; padding-bottom:3rem; }
+    .f-brand { font-family:'Fraunces',serif; font-size:1.5rem; color:var(--parch); margin-bottom:.8rem; display:flex; align-items:center; gap:.5rem; }
+    .f-brand img { width:32px; height:32px; object-fit:contain; }
+    .f-desc { font-size:.87rem; line-height:1.8; opacity:.7; max-width:280px; }
+    .f-socials { display:flex; gap:.55rem; margin-top:1.4rem; }
+    .fsoc { width:38px; height:38px; border-radius:50%; background:rgba(232,221,176,.07); border:1px solid rgba(232,221,176,.1); color:rgba(232,221,176,.7); display:flex; align-items:center; justify-content:center; font-size:.9rem; transition:all .25s; }
+    .fsoc:hover { background:var(--terra); border-color:var(--terra); color:#fff; transform:translateY(-2px); }
+    .f-col h6 { color:var(--terra-light); font-family:'Fraunces',serif; font-size:1.05rem; margin-bottom:1.1rem; }
+    .flinks { list-style:none; display:flex; flex-direction:column; gap:.55rem; }
+    .flinks a { color:rgba(232,221,176,.55); font-size:.87rem; transition:all .2s; }
+    .flinks a:hover { color:var(--parch); padding-left:4px; }
+    .fci { display:flex; align-items:flex-start; gap:.65rem; font-size:.85rem; opacity:.7; margin-bottom:.75rem; }
+    .fci i { color:var(--terra-light); margin-top:.1rem; flex-shrink:0; }
+    /* sage core values accent */
+    .core-pill { display:inline-block; background:rgba(138,144,104,.15); border:1px solid rgba(138,144,104,.3); color:var(--sage-light); font-size:.75rem; font-weight:600; padding:.2rem .65rem; border-radius:50px; margin:.15rem; }
+    .footer-bottom { border-top:1px solid rgba(232,221,176,.07); padding:1.2rem 0; text-align:center; font-size:.82rem; color:rgba(232,221,176,.3); }
+
+    /* ══════════════ TOAST ══════════════ */
+    .toast-box { position:fixed; bottom:2rem; right:2rem; z-index:2000; display:flex; flex-direction:column; gap:.55rem; }
+    .toast { background:var(--choc); color:var(--parch); border-radius:var(--radius-md); padding:.85rem 1.3rem; font-size:.87rem; font-weight:600; display:flex; align-items:center; gap:.65rem; box-shadow:0 8px 30px rgba(0,0,0,.35); animation:tIn .4s both; min-width:230px; max-width:310px; border-left:4px solid var(--terra); }
+    .toast.ok { border-color:var(--sage); }
+    .toast i { font-size:1rem; color:var(--terra-light); }
+    .toast.ok i { color:var(--sage-light); }
+    @keyframes tIn  { from{opacity:0;transform:translateX(50px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes tOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(50px)} }
+
+    /* ══════════════ FLOAT BUTTON ══════════════ */
+    .float-btn { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--choc),var(--terra)); color:var(--parch); border:none; border-radius:50px; padding:.8rem 2rem; font-size:.88rem; font-weight:700; cursor:pointer; box-shadow:0 8px 30px rgba(92,31,10,.5); display:flex; align-items:center; gap:.55rem; z-index:890; transition:all .3s; font-family:'DM Sans',sans-serif; opacity:0; pointer-events:none; white-space:nowrap; }
+    .float-btn.show { opacity:1; pointer-events:all; }
+    .float-btn:hover { transform:translateX(-50%) translateY(-3px); box-shadow:0 14px 40px rgba(92,31,10,.6); }
+
+    /* ══════════════ RESPONSIVE ══════════════ */
+    @media(max-width:1024px){
+      .about-grid { grid-template-columns:1fr; gap:3rem; }
+      .about-main-img { height:320px; }
+      .mgrid { grid-template-columns:repeat(2,1fr); }
+      .cat-types { grid-template-columns:repeat(2,1fr); }
+      .footer-grid { grid-template-columns:1fr 1fr; gap:2rem; }
+      .stats-band-inner { grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:768px){
+      .nav-links { display:none; }
+      .burger { display:flex; }
+      .hero-stats { gap:1.5rem; }
+      .mgrid, .mgrid.c3, .ic-grid { grid-template-columns:1fr; }
+      .rev-grid { grid-template-columns:1fr; }
+      .contact-grid { grid-template-columns:1fr; gap:2.5rem; }
+      .gal-grid { grid-template-columns:repeat(3,1fr); grid-template-rows:auto; }
+      .gi:nth-child(1) { grid-column:1/4; grid-row:auto; height:180px; }
+      .inquiry-wrap { padding:1.5rem; }
+      .fg { grid-template-columns:1fr; }
+      .cform-grid { grid-template-columns:1fr; }
+      .footer-grid { grid-template-columns:1fr; }
+      .stats-band-inner { grid-template-columns:1fr 1fr; }
+    }
   </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar" id="navbar">
   <div class="container">
-    <a class="navbar-brand" href="#home">
-      <img src="ScopeLogo.png" alt="ChurroScope Logo" class="churro-logo">
-      ChurroScope<span></span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-      <ul class="navbar-nav align-items-lg-center gap-1">
-        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+    <div class="nav-inner">
+      <a class="nav-brand" href="#home">
+        <img src="ScopeLogo.png" alt="ChurroScope"/>
+        ChurroScope <em>/ every bite counts</em>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#catering">Catering</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li>
+          <button class="nav-cart-btn" id="cartBtn">
+            <i class="bi bi-bag"></i> Cart
+            <span class="cart-badge" id="cartCount">0</span>
+          </button>
+        </li>
+        <li><a href="#menu" class="btn-nav-cta">Order Now</a></li>
       </ul>
+      <div style="display:flex;align-items:center;gap:.7rem;">
+        <button class="nav-cart-btn" id="cartBtnM" style="display:none;">
+          <i class="bi bi-bag"></i><span class="cart-badge" id="cartCountM">0</span>
+        </button>
+        <div class="burger" id="burger"><span></span><span></span><span></span></div>
+      </div>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close" id="mobClose"><i class="bi bi-x-lg"></i></button>
+  <a href="#home" class="ml">Home</a>
+  <a href="#about" class="ml">About</a>
+  <a href="#menu" class="ml">Menu</a>
+  <a href="#catering" class="ml">Catering</a>
+  <a href="#reviews" class="ml">Reviews</a>
+  <a href="#gallery" class="ml">Gallery</a>
+  <a href="#contact" class="ml">Contact</a>
+</div>
+
+<!-- CART -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <h4><i class="bi bi-bag me-2"></i>Your Order</h4>
+    <button class="cart-x" id="cartClose"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty-s"><i class="bi bi-bag"></i><p style="font-weight:600;color:var(--choc);">Your cart is empty</p><p style="font-size:.82rem;margin-top:.3rem;">Add some healthy churros!</p></div>
+  </div>
+  <div class="cart-foot" id="cartFoot" style="display:none;">
+    <div class="cart-tot"><strong>Total</strong><span id="cartTotal">₱0</span></div>
+    <button class="checkout-btn" id="checkoutBtn">Checkout <i class="bi bi-arrow-right ms-1"></i></button>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
 <section id="home">
-  <div class="container py-5" style="padding-top:130px!important;">
-    <div class="row">
-      <div class="col-lg-7 col-xl-6">
-        <h1 class="hero-title">ChurroScope</h1>
-        <p class="hero-sub">Churroscope is a combination of words derived from three distinctive terms, Churro, Scope, and Cope. Churro is a fried dough snack originating from Spain and was created by Spanish Shepherds, in which many believed that the name "Churro" was derived from the breed of sheep called Navajo-Churro, as the horns of it resembled the fried dough churro.</p>
-        <div class="d-flex flex-wrap gap-3">
-          <a href="#menu" class="btn btn-gold">View Menu</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
+  <div class="hero-bg-img"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-grain"></div>
+  <svg class="hero-arcs" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="350" cy="350" r="280" stroke-width="1.5"/>
+    <circle cx="350" cy="350" r="210" stroke-width="1"/>
+    <circle cx="350" cy="350" r="140" stroke-width="1.5"/>
+    <circle cx="350" cy="350" r="70" stroke-width="1"/>
+  </svg>
+  <div class="hero-particles" id="heroParts"></div>
+  <div class="hero-stripe"></div>
   <div class="container">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-5">
-        <div class="about-img">
-          <img src="new7.jpg" alt="Making churros">
+    <div class="hero-content">
+      <div class="hero-pill">
+        <span></span>
+        Freshly fried · vegetable-infused · made to order
+      </div>
+      <h1 class="hero-title">
+        Churro<br>Scope
+        <span class="hl">Every Bite Counts.</span>
+      </h1>
+      <p class="hero-sub">A combination of Churro, Scope, and Cope — inspired by the Spanish fried dough snack with a healthy, veggie-infused twist. Moringa, squash, sweet potato & banana.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn-terra">View Menu <i class="bi bi-arrow-right"></i></a>
+        <a href="#catering" class="btn-sage">Book Catering</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><strong id="hS1">0</strong><span>Happy Customers</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><strong>4</strong><span>Veggie Flavors</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><strong>5★</strong><span>Avg Rating</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><strong id="hS2">0</strong><span>Orders Served</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,80 C360,20 1080,20 1440,80 L1440,80 L0,80 Z" fill="var(--parch-light)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" style="background:#fff;padding:100px 0;">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-visual">
+          <div class="about-corner"></div>
+          <img src="new7.jpg" alt="ChurroScope churros" class="about-main-img"/>
+          <div class="about-corner2"></div>
+          <div class="about-badge-ring"><span>🌿</span></div>
         </div>
       </div>
-      <div class="col-lg-7">
-        <p class="section-label">Our Story</p>
-        <h2 class="section-title">CORE VALUES<br>C.H.U.R.R.O.S.C.O.P.E</h2>
-        <div class="divider" style="margin-left:0;"></div>
-        <div class="mb-4" style="color:var(--brown-mid);line-height:1.8;">
-          <ul class="list-unstyled" style="font-size:.9rem;opacity:.8;line-height:2;">
-          <li>Creativity</li>
-          <li>Health</li>
-          <li>Uniqueness</li>
-          <li>Reliability</li>
-          <li>Respect</li>
-          <li>Optimism</li>
-          <li>Sustainability</li>
-        </ul>
+      <div class="reveal d2">
+        <div class="eyebrow" style="margin-bottom:.6rem;">Our Story & Values</div>
+        <h2 class="section-title">C.H.U.R.R.O.S.C.O.P.E</h2>
+        <div class="title-rule"></div>
+
+        <div class="vision-box choc">
+          <h5>Vision</h5>
+          <p>To make vegetable-based snacks more popular by turning them into crispy, healthy treats — created with creativity, made with care for health, and developed sustainably.</p>
         </div>
-        <div class="about-feature">
-          <div class="about-icon"><i class="bi bi-fire"></i></div>
-          <div><strong>Made to Order</strong><br><span style="font-size:.9rem;color:var(--brown-mid);">Every churro is fried fresh when you order.</span></div>
+        <div class="vision-box parch">
+          <h5>Mission</h5>
+          <p>To deliver nutrient-rich, healthier churros in every bite — through creative innovation, unique health-focused ingredients, reliable quality, respectful service, optimistic growth, and sustainable practices.</p>
         </div>
-        <div class="about-feature">
-          <div class="about-icon"><i class="bi bi-stars"></i></div>
-          <div><strong>Flavors</strong><br><span style="font-size:.9rem;color:var(--brown-mid);"> Churinga, Chusquash, Chuweetpotato, Chubanana</span></div>
-        </div>
-        <div class="about-feature">
-          <div class="about-icon"><i class="bi bi-heart-fill"></i></div>
-          <div><strong>Organic Friendly</strong><br><span style="font-size:.9rem;color:var(--brown-mid);">Three generations of churro mastery, brought to your neighborhood.</span></div>
-        </div>
-        <a href="#menu" class="btn btn-gold mt-3">Explore Our Menu</a>
+
+        <a href="#menu" class="btn-terra" style="margin-top:.5rem;">Explore Our Menu <i class="bi bi-arrow-right"></i></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MENU -->
+<!-- ══ STATS BAND ══ -->
+<div class="stats-band">
+  <div class="container">
+    <div class="stats-band-inner">
+      <div class="sband-item reveal"><strong id="sb1">0</strong><span>Happy Customers</span></div>
+      <div class="sband-item reveal d1"><strong>4</strong><span>Veggie Flavors</span></div>
+      <div class="sband-item reveal d2"><strong id="sb2">0</strong><span>Orders Served</span></div>
+      <div class="sband-item reveal d3"><strong>5.0 ★</strong><span>Star Rating</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MENU ══ -->
 <section id="menu">
   <div class="container">
-    <div class="text-center mb-5">
-      <p class="section-label">What We Serve</p>
-      <h2 class="section-title">Our Delicious Menu</h2>
-      <div class="divider"></div>
+    <div style="text-align:center;margin-bottom:2.5rem;" class="reveal">
+      <div class="eyebrow" style="justify-content:center;">What We Serve</div>
+      <h2 class="section-title" style="margin-top:.5rem;">Our Delicious Menu</h2>
+      <div class="title-rule center"></div>
+    </div>
+    <div class="menu-tabs reveal">
+      <button class="tab-btn active" data-panel="churros"><i class="bi bi-tornado"></i> Churros</button>
+      <button class="tab-btn" data-panel="chill"><i class="bi bi-snow"></i> Churro-Chill</button>
+      <button class="tab-btn" data-panel="bites"><i class="bi bi-grid-3x3-gap-fill"></i> Bites</button>
+      <button class="tab-btn" data-panel="bundles"><i class="bi bi-box-seam"></i> Bundles</button>
+      <button class="tab-btn" data-panel="complimentary"><i class="bi bi-gift"></i> Complimentary</button>
+      <button class="tab-btn" data-panel="dippings"><i class="bi bi-cup-straw"></i> Dippings</button>
+      <button class="tab-btn" data-panel="drinks"><i class="bi bi-droplet"></i> Drinks</button>
     </div>
 
-    <!-- TAB BUTTONS -->
-    <div class="menu-tabs">
-      <button class="menu-tab-btn active" onclick="showMenuPanel('churros', this)">
-        <i class="bi bi-tornado"></i> Churros
-      </button>
-      <button class="menu-tab-btn" onclick="showMenuPanel('chill', this)">
-        <i class="bi bi-snow"></i> Churro-Chill
-      </button>
-      <button class="menu-tab-btn" onclick="showMenuPanel('bites', this)">
-        <i class="bi bi-grid-3x3-gap-fill"></i> Bites
-      </button>
-      <button class="menu-tab-btn" onclick="showMenuPanel('bundles', this)">
-        <i class="bi bi-box-seam"></i> Bundles
-      </button>
-      <button class="menu-tab-btn" onclick="showMenuPanel('complimentary', this)">
-        <i class="bi bi-gift"></i> Complimentary
-      </button>
-      <button class="menu-tab-btn" onclick="showMenuPanel('dippings', this)">
-        <i class="bi bi-cup-straw"></i> Dippings
-      </button>
-      <button class="menu-tab-btn" onclick="showMenuPanel('drinks', this)">
-        <i class="bi bi-droplet"></i> Drinks
-      </button>
-    </div>
-
-    <!-- ══ CHURROS PANEL ══ -->
+    <!-- CHURROS -->
     <div class="menu-panel active" id="panel-churros">
-      <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Classic hand-crafted churros — one price, pure flavor.</p>
-      <div class="row g-4">
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="greeb.png" class="menu-card-img" alt="Churinga">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag">Moringa</span>
-              <h5>Churinga</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per piece</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
+      <p style="text-align:center;margin-bottom:1.75rem;font-size:.88rem;color:var(--text-muted);">Classic hand-crafted vegetable-infused churros — crispy outside, soft inside.</p>
+      <div class="mgrid">
+        <div class="mcard reveal">
+          <div class="mcard-img"><img src="greeb.png" alt="Churinga"/><span class="mbadge mb-sage">Moringa</span></div>
+          <div class="mcard-body"><h5>Churinga</h5><p>Infused with nutrient-rich moringa — earthy, fragrant, and packed with vitamins.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per piece</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('churinga',-1)">−</button><span class="qn" id="qn-churinga">0</span><button class="qb" onclick="cQty('churinga',1)">+</button></div><button class="btn-add" onclick="addCart('churinga','Churinga',29,'greeb.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
         </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="vi.png" class="menu-card-img" alt="Chusquash">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag">Squash</span>
-              <h5>Chusquash</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per piece</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
+        <div class="mcard reveal d1">
+          <div class="mcard-img"><img src="vi.png" alt="Chusquash"/><span class="mbadge mb-terra">Squash</span></div>
+          <div class="mcard-body"><h5>Chusquash</h5><p>Sweet squash blended into the dough for a golden, naturally sweet flavor.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per piece</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('chusquash',-1)">−</button><span class="qn" id="qn-chusquash">0</span><button class="qb" onclick="cQty('chusquash',1)">+</button></div><button class="btn-add" onclick="addCart('chusquash','Chusquash',29,'vi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
         </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="ye.png" class="menu-card-img" alt="Chuweetpotato">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag">Sweet Potato</span>
-              <h5>Chuweetpotato</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per piece</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
+        <div class="mcard reveal d2">
+          <div class="mcard-img"><img src="ye.png" alt="Chuweetpotato"/><span class="mbadge mb-parch">Sweet Potato</span></div>
+          <div class="mcard-body"><h5>Chuweetpotato</h5><p>Warm sweet potato notes baked right in — comforting, sweet, and vibrant.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per piece</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('chuweetpotato',-1)">−</button><span class="qn" id="qn-chuweetpotato">0</span><button class="qb" onclick="cQty('chuweetpotato',1)">+</button></div><button class="btn-add" onclick="addCart('chuweetpotato','Chuweetpotato',29,'ye.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
         </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="or.png" class="menu-card-img" alt="Chubanana">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag">Banana</span>
-              <h5>Chubanana</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per piece</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
+        <div class="mcard reveal d3">
+          <div class="mcard-img"><img src="or.png" alt="Chubanana"/><span class="mbadge mb-terra">Banana</span></div>
+          <div class="mcard-body"><h5>Chubanana</h5><p>Ripe banana gives this churro a fruity sweetness and tender, moist interior.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per piece</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('chubanana',-1)">−</button><span class="qn" id="qn-chubanana">0</span><button class="qb" onclick="cQty('chubanana',1)">+</button></div><button class="btn-add" onclick="addCart('chubanana','Chubanana',29,'or.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
         </div>
-
       </div>
     </div>
 
-    <!-- ══ CHURRO-CHILL PANEL ══ -->
+    <!-- CHILL -->
     <div class="menu-panel" id="panel-chill">
-      <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Churros paired with your choice of I Scream!</p>
-      <div class="row g-4 justify-content-center">
-
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag chill">Churro-Chill</span>
-              <h5>Churros w/ Tsokolat I Scream!</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;flex:1;">Freshly fried churro paired with rich chocolate ice cream.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;39</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag chill">Churro-Chill</span>
-              <h5>Churros w/ Vanelya I Scream!</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;flex:1;">Freshly fried churro paired with creamy vanilla ice cream.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;39</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag ube">Churro-Chill</span>
-              <h5>Churros w/ Ubeybe I Scream!</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;flex:1;">Freshly fried churro paired with sweet ube ice cream.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;39</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <p style="text-align:center;margin-bottom:1.75rem;font-size:.88rem;color:var(--text-muted);">Freshly fried churros paired with your favorite I Scream! flavor.</p>
+      <div class="mgrid c3">
+        <div class="mcard"><div class="mcard-body"><span class="mbadge mb-choc" style="position:static;margin-bottom:.55rem;display:inline-block;">Churro-Chill</span><h5>Churros + Tsokolat I Scream!</h5><p>Rich chocolate ice cream meets a crispy warm churro. The ultimate contrast.</p><div class="mcard-foot"><div class="mprice">₱39</div><button class="btn-add" onclick="addCart('chill-choco','Churros + Tsokolat',39,'greeb.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
+        <div class="mcard"><div class="mcard-body"><span class="mbadge mb-sage-p" style="position:static;margin-bottom:.55rem;display:inline-block;">Churro-Chill</span><h5>Churros + Vanelya I Scream!</h5><p>Classic creamy vanilla paired with cinnamon-dusted churros. A timeless combo.</p><div class="mcard-foot"><div class="mprice">₱39</div><button class="btn-add" onclick="addCart('chill-vanilla','Churros + Vanelya',39,'ye.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
+        <div class="mcard"><div class="mcard-body"><span class="mbadge mb-terra" style="position:static;margin-bottom:.55rem;display:inline-block;">Churro-Chill</span><h5>Churros + Ubeybe I Scream!</h5><p>Sweet Filipino ube ice cream — a proudly local pairing full of color and flavor.</p><div class="mcard-foot"><div class="mprice">₱39</div><button class="btn-add" onclick="addCart('chill-ube','Churros + Ubeybe',39,'vi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
       </div>
     </div>
 
-    <!-- ══ BITES PANEL (new) ══ -->
+    <!-- BITES -->
     <div class="menu-panel" id="panel-bites">
-      <p class="text-center mb-4" style="color:var(--brown-mid);font-size:.9rem;">Mini churro bites — same great flavors, fun bite-sized pieces!</p>
-      <div class="row g-4 justify-content-center">
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="bi.png" class="menu-card-img" alt="Churinga Bites">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag bites">Moringa · Bites</span>
-              <h5>Churinga Bites</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per serving</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="bi.png" class="menu-card-img" alt="Chusquash Bites">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag bites">Squash · Bites</span>
-              <h5>Chusquash Bites</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per serving</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="bi.png" class="menu-card-img" alt="Chuweetpotato Bites">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag bites">Sweet Potato · Bites</span>
-              <h5>Chuweetpotato Bites</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per serving</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-3">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="bi.png" class="menu-card-img" alt="Chubanana Bites">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag bites">Banana · Bites</span>
-              <h5>Chubanana Bites</h5>
-              <div class="menu-price-single">&#8369;29</div>
-              <div class="menu-price-label">per serving</div>
-              <div class="menu-card-footer">
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <p style="text-align:center;margin-bottom:1.75rem;font-size:.88rem;color:var(--text-muted);">Same great veggie flavors — mini bite-sized and perfect for snacking!</p>
+      <div class="mgrid">
+        <div class="mcard"><div class="mcard-img"><img src="bi.png" alt="Churinga Bites"/><span class="mbadge mb-sage">Moringa</span></div><div class="mcard-body"><h5>Churinga Bites</h5><p>Mini moringa bites, crispy and earthy — great for grazing.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per serving</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('churinga-b',-1)">−</button><span class="qn" id="qn-churinga-b">0</span><button class="qb" onclick="cQty('churinga-b',1)">+</button></div><button class="btn-add" onclick="addCart('churinga-b','Churinga Bites',29,'bi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div>
+        <div class="mcard"><div class="mcard-img"><img src="bi.png" alt="Chusquash Bites"/><span class="mbadge mb-terra">Squash</span></div><div class="mcard-body"><h5>Chusquash Bites</h5><p>Golden squash bites, naturally sweet and perfectly snackable.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per serving</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('chusquash-b',-1)">−</button><span class="qn" id="qn-chusquash-b">0</span><button class="qb" onclick="cQty('chusquash-b',1)">+</button></div><button class="btn-add" onclick="addCart('chusquash-b','Chusquash Bites',29,'bi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div>
+        <div class="mcard"><div class="mcard-img"><img src="bi.png" alt="Chuweetpotato Bites"/><span class="mbadge mb-parch">Sweet Potato</span></div><div class="mcard-body"><h5>Chuweetpotato Bites</h5><p>Sweet potato in every mini bite — comforting and perfect with dip.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per serving</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('chuweetpotato-b',-1)">−</button><span class="qn" id="qn-chuweetpotato-b">0</span><button class="qb" onclick="cQty('chuweetpotato-b',1)">+</button></div><button class="btn-add" onclick="addCart('chuweetpotato-b','Chuweetpotato Bites',29,'bi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div>
+        <div class="mcard"><div class="mcard-img"><img src="bi.png" alt="Chubanana Bites"/><span class="mbadge mb-terra">Banana</span></div><div class="mcard-body"><h5>Chubanana Bites</h5><p>Banana-infused churro bites with a tropical sweetness. Irresistibly moreish.</p><div class="mcard-foot"><div class="mprice">₱29<sub>per serving</sub></div><div style="display:flex;gap:.4rem;align-items:center;"><div class="qty-row"><button class="qb" onclick="cQty('chubanana-b',-1)">−</button><span class="qn" id="qn-chubanana-b">0</span><button class="qb" onclick="cQty('chubanana-b',1)">+</button></div><button class="btn-add" onclick="addCart('chubanana-b','Chubanana Bites',29,'bi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div>
       </div>
     </div>
 
-    <!-- ══ BUNDLES PANEL ══ -->
+    <!-- BUNDLES -->
     <div class="menu-panel" id="panel-bundles">
-      <div class="row g-4 justify-content-center">
-
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="bi.png" class="menu-card-img" alt="Chubitescope">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag bundle">Bundle</span>
-              <h5>Chubitescope</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Bites in a cup — mini churro bites served in a cup, perfect for sharing or snacking on the go.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;29</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-img-wrap">
-              <img src="box.png" class="menu-card-img" alt="Chusixcope">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-tag bundle">Bundle</span>
-              <h5>Chusixcope</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">6 pcs churros of your chosen flavor packed in a box — great for groups, events, or gifting.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;99</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <div class="mgrid c2">
+        <div class="mcard"><div class="mcard-img"><img src="bi.png" alt="Chubitescope"/><span class="mbadge mb-sage">Bundle</span></div><div class="mcard-body"><h5>Chubitescope</h5><p>Mini churro bites in a cup — perfect for snacking on the go or sharing at events.</p><div class="mcard-foot"><div class="mprice">₱29</div><button class="btn-add" onclick="addCart('chubitescope','Chubitescope',29,'bi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
+        <div class="mcard"><div class="mcard-img"><img src="box.png" alt="Chusixcope"/><span class="mbadge mb-terra">Bundle</span></div><div class="mcard-body"><h5>Chusixcope</h5><p>6 pieces of your chosen flavor in a gift-ready box. Great for groups or gifting!</p><div class="mcard-foot"><div class="mprice">₱99</div><button class="btn-add" onclick="addCart('chusixcope','Chusixcope (6pcs)',99,'box.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div>
       </div>
     </div>
 
-    <!-- ══ COMPLIMENTARY PANEL ══ -->
+    <!-- COMPLIMENTARY -->
     <div class="menu-panel" id="panel-complimentary">
-      <div class="row g-4 justify-content-center">
-        <div class="col-sm-6 col-lg-3">
-          <div class="ic-card">
-            <span class="ic-emoji">🍦</span>
-            <h5 class="mb-2">Vanelya I Scream!</h5>
-            <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:1rem;">Classic creamy vanilla.</p>
-            <span class="menu-tag free">Complimentary</span>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="ic-card">
-            <span class="ic-emoji">🍫</span>
-            <h5 class="mb-2">Tsokolat I Scream!</h5>
-            <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:1rem;">Rich dark chocolate.</p>
-            <span class="menu-tag free">Complimentary</span>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="ic-card">
-            <span class="ic-emoji">💜</span>
-            <h5 class="mb-2">Ubeybe I Scream!</h5>
-            <p style="font-size:.9rem;color:var(--brown-mid);margin-bottom:1rem;">Sweet Filipino ube.</p>
-            <span class="menu-tag free">Complimentary</span>
-          </div>
-        </div>
+      <p style="text-align:center;margin-bottom:1.75rem;font-size:.88rem;color:var(--text-muted);">Complimentary I Scream! flavors — included with Churro-Chill orders.</p>
+      <div class="ic-grid">
+        <div class="ic-card"><span class="ic-emoji">🍫</span><h5>Tsokolat I Scream!</h5><p>Rich, dark chocolate ice cream</p><span class="badge-free">Complimentary</span></div>
+        <div class="ic-card"><span class="ic-emoji">🍦</span><h5>Vanelya I Scream!</h5><p>Classic creamy vanilla</p><span class="badge-free">Complimentary</span></div>
+        <div class="ic-card"><span class="ic-emoji">💜</span><h5>Ubeybe I Scream!</h5><p>Sweet Filipino ube</p><span class="badge-free">Complimentary</span></div>
       </div>
     </div>
 
-    <!-- ══ DIPPINGS PANEL ══ -->
+    <!-- DIPPINGS -->
     <div class="menu-panel" id="panel-dippings">
-      <div class="dip-card">
-        <div class="dip-row">
-          <div class="dip-swatch" style="background:#4a2409;"></div>
-          <span class="dip-name">Chocolate Dip</span>
-          <span class="dip-note">Dark &amp; rich</span>
-          <span class="dip-price">&#8369;25</span>
-        </div>
-        <div class="dip-row">
-          <div class="dip-swatch" style="background:#f5e6c8;border-color:#d4c09a;"></div>
-          <span class="dip-name">White Chocolate Dip</span>
-          <span class="dip-note">Sweet &amp; creamy</span>
-          <span class="dip-price">&#8369;25</span>
-        </div>
-        <div class="dip-row">
-          <div class="dip-swatch" style="background:#d4872a;"></div>
-          <span class="dip-name">Caramel Dip</span>
-          <span class="dip-note">Warm &amp; buttery</span>
-          <span class="dip-price">&#8369;25</span>
-        </div>
+      <p style="text-align:center;margin-bottom:1.75rem;font-size:.88rem;color:var(--text-muted);">All sauces are house-made fresh daily.</p>
+      <div class="dip-table">
+        <div class="dip-row"><div class="dip-dot" style="background:var(--choc-deep);"></div><div class="dip-info"><strong>Chocolate Dip</strong><span>Dark & rich</span></div><button class="btn-dip" onclick="addCart('dip-choco','Chocolate Dip',25,'greeb.png')">Add</button><span class="dip-price">₱25</span></div>
+        <div class="dip-row"><div class="dip-dot" style="background:#f0e8d0;border-color:var(--parch-dark);"></div><div class="dip-info"><strong>White Chocolate Dip</strong><span>Sweet & creamy</span></div><button class="btn-dip" onclick="addCart('dip-wchoco','White Choco Dip',25,'ye.png')">Add</button><span class="dip-price">₱25</span></div>
+        <div class="dip-row"><div class="dip-dot" style="background:var(--terra);"></div><div class="dip-info"><strong>Caramel Dip</strong><span>Warm & buttery</span></div><button class="btn-dip" onclick="addCart('dip-caramel','Caramel Dip',25,'or.png')">Add</button><span class="dip-price">₱25</span></div>
       </div>
-      <p class="text-center mt-4" style="font-size:.85rem;color:var(--brown-mid);opacity:.7;">All dipping sauces are house-made fresh daily.</p>
     </div>
 
-    <!-- ══ DRINKS PANEL ══ -->
+    <!-- DRINKS -->
     <div class="menu-panel" id="panel-drinks">
-      <div class="row g-4 justify-content-center">
-
-        <div class="col-12"><h5 class="text-center" style="color:var(--brown-mid);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Chocolate Drinks</h5></div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag hot">Hot</span>
-              <h5>Hot Chocolate</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Warm, rich, and comforting.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;55</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag">Cold</span>
-              <h5>Cold Chocolate</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Chilled chocolate milk drink.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;65</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12"><h5 class="text-center" style="color:var(--brown-mid);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Fruit Juice</h5></div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag">Juice</span>
-              <h5>Mango Juice</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Sweet and tropical Philippine mango.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;59</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag">Juice</span>
-              <h5>Avocado Juice</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Creamy and refreshing avocado blend.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;59</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12"><h5 class="text-center" style="color:var(--brown-mid);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;">Fruity Soda</h5></div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag chill">Soda</span>
-              <h5>Blueberry Soda</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Fizzy and fruity blueberry refresher.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;55</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="menu-card">
-            <div class="menu-card-body">
-              <span class="menu-tag chill">Soda</span>
-              <h5>Green Apple Soda</h5>
-              <p style="font-size:.88rem;color:var(--brown-mid);margin-bottom:.75rem;">Crisp and tangy green apple fizz.</p>
-              <div class="menu-card-footer">
-                <span class="menu-price">&#8369;55</span>
-                <a href="#contact" class="btn-order">Order Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <div style="margin-bottom:2rem;"><div class="drinks-cat-label">Chocolate Drinks</div><div class="mgrid c3" style="max-width:720px;margin:0 auto;"><div class="mcard"><div class="mcard-body"><span class="mbadge mb-choc" style="position:static;margin-bottom:.5rem;display:inline-block;">Hot</span><h5>Hot Chocolate</h5><p>Warm, rich, and deeply comforting.</p><div class="mcard-foot"><div class="mprice">₱55</div><button class="btn-add" onclick="addCart('hot-choco','Hot Chocolate',55,'greeb.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div><div class="mcard"><div class="mcard-body"><span class="mbadge mb-sage-p" style="position:static;margin-bottom:.5rem;display:inline-block;">Cold</span><h5>Cold Chocolate</h5><p>Chilled chocolate milk — cool & refreshing.</p><div class="mcard-foot"><div class="mprice">₱65</div><button class="btn-add" onclick="addCart('cold-choco','Cold Chocolate',65,'vi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div></div>
+      <div style="margin-bottom:2rem;"><div class="drinks-cat-label">Fruit Juices</div><div class="mgrid c3" style="max-width:720px;margin:0 auto;"><div class="mcard"><div class="mcard-body"><span class="mbadge mb-terra" style="position:static;margin-bottom:.5rem;display:inline-block;">Juice</span><h5>Mango Juice</h5><p>Sweet and tropical Philippine mango.</p><div class="mcard-foot"><div class="mprice">₱59</div><button class="btn-add" onclick="addCart('mango','Mango Juice',59,'ye.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div><div class="mcard"><div class="mcard-body"><span class="mbadge mb-sage" style="position:static;margin-bottom:.5rem;display:inline-block;">Juice</span><h5>Avocado Juice</h5><p>Creamy and refreshing avocado blend.</p><div class="mcard-foot"><div class="mprice">₱59</div><button class="btn-add" onclick="addCart('avo','Avocado Juice',59,'greeb.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div></div>
+      <div><div class="drinks-cat-label">Fruity Sodas</div><div class="mgrid c3" style="max-width:720px;margin:0 auto;"><div class="mcard"><div class="mcard-body"><span class="mbadge mb-sage-p" style="position:static;margin-bottom:.5rem;display:inline-block;">Soda</span><h5>Blueberry Soda</h5><p>Fizzy, fruity, refreshing blueberry.</p><div class="mcard-foot"><div class="mprice">₱55</div><button class="btn-add" onclick="addCart('blueberry','Blueberry Soda',55,'vi.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div><div class="mcard"><div class="mcard-body"><span class="mbadge mb-sage" style="position:static;margin-bottom:.5rem;display:inline-block;">Soda</span><h5>Green Apple Soda</h5><p>Crisp and tangy green apple fizz.</p><div class="mcard-foot"><div class="mprice">₱55</div><button class="btn-add" onclick="addCart('greenapple','Green Apple Soda',55,'greeb.png')">Add <i class="bi bi-bag-plus"></i></button></div></div></div></div></div>
     </div>
-
   </div>
 </section>
-<!-- CONTACT -->
-<section id="contact" style="padding:80px 0; background:#f9ead2;">
+
+
+<!-- ══ REVIEWS ══ -->
+<section id="reviews" style="background:#fff;padding:100px 0;">
   <div class="container">
-    <div class="row align-items-center g-4">
-      <div class="col-lg-7">
-        <p class="section-label">Get in Touch</p>
-        <h2 class="section-title">Order & Contact</h2>
-        <div class="divider" style="margin-left:0;"></div>
-        <p style="color:var(--brown-mid);line-height:1.8;">Have a question or want to place an order? Reach out by phone, email, or stop by during shop hours.</p>
-      </div>
-      <div class="col-lg-5">
-        <div class="dip-card">
-          <div class="dip-row">
-            <span class="dip-name">Phone</span>
-            <span class="dip-price">+63 987-654-3210</span>
-          </div>
-          <div class="dip-row">
-            <span class="dip-name">Email</span>
-            <span class="dip-price">churroscope11@gmail.com</span>
-          </div>
-          <div class="dip-row">
-            <span class="dip-name">Location</span>
-            <span class="dip-price">Valenzuela</span>
-          </div>
-        </div>
-      </div>
+    <div style="text-align:center;margin-bottom:3rem;" class="reveal">
+      <div class="eyebrow" style="justify-content:center;">What People Say</div>
+      <h2 class="section-title" style="margin-top:.5rem;">Customer Reviews</h2>
+      <div class="title-rule center"></div>
+    </div>
+    <div class="rev-grid">
+      <div class="rcard reveal"><div class="r-stars">★★★★★</div><p class="r-text">These churros are INCREDIBLE! I ordered for my daughter's birthday and everyone was raving about them all night. The ube ice cream pairing is a must-try!</p><div class="r-author"><div class="r-av">M</div><div><div class="r-name">Maria Santos</div><div class="r-role">Birthday party host · Valenzuela</div></div></div></div>
+      <div class="rcard reveal d2"><div class="r-stars">★★★★★</div><p class="r-text">We hired ChurroScope for our school event. The live churro station was a massive hit — professional, delicious, and the setup looked absolutely amazing!</p><div class="r-author"><div class="r-av">J</div><div><div class="r-name">James Reyes</div><div class="r-role">Event Organizer · PLV</div></div></div></div>
+      <div class="rcard reveal d3"><div class="r-stars">★★★★★</div><p class="r-text">Best churros in the area, hands down! The Churinga with moringa is so unique and healthy. My whole family has been hooked since the very first bite!</p><div class="r-author"><div class="r-av">A</div><div><div class="r-name">Ana Lim</div><div class="r-role">Regular customer · Bulacan</div></div></div></div>
     </div>
   </div>
 </section>
-<!-- GALLERY -->
+
+<!-- ══ GALLERY ══ -->
 <section id="gallery">
   <div class="container">
-    <div class="text-center mb-4">
-      <p class="section-label">Follow Along</p>
-      <h2 class="section-title">ChurroScope</h2>
-      <div class="divider"></div>
-      <p style="color:var(--brown-mid);">"Don't Churrow away your Happiness"</p>
+    <div style="text-align:center;margin-bottom:2.5rem;" class="reveal">
+      <div class="eyebrow" style="justify-content:center;">Follow Along</div>
+      <h2 class="section-title" style="margin-top:.5rem;">ChurroScope</h2>
+      <div class="title-rule center"></div>
+      <p style="color:var(--text-muted);font-style:italic;">"Don't Churrow away your Happiness" 🌀</p>
     </div>
-    <div class="insta-grid row g-3">
-      <div class="col-4 col-md-2"><img src="new1.jpg" alt="churros 1"></div>
-      <div class="col-4 col-md-2"><img src="new2.jpg" alt="churros 2"></div>
-      <div class="col-4 col-md-2"><img src="new3.jpg" alt="churros 3"></div>
-      <div class="col-4 col-md-2"><img src="new4.jpg" alt="pastry 1"></div>
-      <div class="col-4 col-md-2"><img src="new5.jpg" alt="pastry 2"></div>
-      <div class="col-4 col-md-2"><img src="new6.jpg" alt="dessert"></div>
+    <div class="gal-grid reveal">
+      <div class="gi"><img src="new1.jpg" alt="ChurroScope 1"/><div class="gi-overlay"><span><i class="bi bi-instagram"></i> View Post</span></div></div>
+      <div class="gi"><img src="new2.jpg" alt="ChurroScope 2"/><div class="gi-overlay"><span><i class="bi bi-instagram"></i> View Post</span></div></div>
+      <div class="gi"><img src="new3.jpg" alt="ChurroScope 3"/><div class="gi-overlay"><span><i class="bi bi-instagram"></i> View Post</span></div></div>
+      <div class="gi"><img src="new4.jpg" alt="ChurroScope 4"/><div class="gi-overlay"><span><i class="bi bi-instagram"></i> View Post</span></div></div>
+      <div class="gi"><img src="new5.jpg" alt="ChurroScope 5"/><div class="gi-overlay"><span><i class="bi bi-instagram"></i> View Post</span></div></div>
+      <div class="gi"><img src="new6.jpg" alt="ChurroScope 6"/><div class="gi-overlay"><span><i class="bi bi-instagram"></i> View Post</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
+<!-- ══ CONTACT ══ -->
+<section id="contact">
   <div class="container">
-    <div class="row g-4">
-      <div class="col-lg-4">
-        <h5>ChurroScope</h5>
-        <p style="font-size:.9rem;opacity:.75;line-height:1.7;">Churroscope is a combination of words derived from three distinctive terms, Churro, Scope, and Cope. Churro is a fried dough snack originating from Spain and was created by Spanish Shepherds, in which many believed that the name "Churro" was derived from the breed of sheep called Navajo-Churro, as the horns of it resembled the fried dough churro.</p>
-        <div class="footer-social mt-3">
-          <a href="https://www.instagram.com/churro_scope?igsh=NWtzODh5a2oxOWc0"><i class="bi bi-instagram"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61582252856025"><i class="bi bi-facebook"></i></a>
-          <a href="https://www.tiktok.com/@churroscope?_r=1&_t=ZS-94dvgCr4O4D"><i class="bi bi-tiktok"></i></a>
+    <div style="text-align:center;margin-bottom:3rem;" class="reveal">
+      <div class="eyebrow" style="justify-content:center;">Get In Touch</div>
+      <h2 class="section-title" style="margin-top:.5rem;">Order & Contact</h2>
+      <div class="title-rule center"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="c-items">
+          <div class="c-item"><div class="c-icon"><i class="bi bi-telephone-fill"></i></div><div><div class="c-label">Phone</div><div class="c-val"><a href="tel:+639876543210">+63 987-654-3210</a></div></div></div>
+          <div class="c-item"><div class="c-icon"><i class="bi bi-envelope-fill"></i></div><div><div class="c-label">Email</div><div class="c-val"><a href="mailto:churroscope11@gmail.com">churroscope11@gmail.com</a></div></div></div>
+          <div class="c-item"><div class="c-icon"><i class="bi bi-geo-alt-fill"></i></div><div><div class="c-label">Location</div><div class="c-val">Valenzuela, Metro Manila, Philippines</div></div></div>
+          <div class="c-item"><div class="c-icon"><i class="bi bi-clock-fill"></i></div><div><div class="c-label">Hours</div><div class="c-val">Monday – Sunday: 9 AM – 10 PM</div></div></div>
+          <div class="c-item"><div class="c-icon"><i class="bi bi-share-fill"></i></div><div><div class="c-label">Follow Us</div><div class="socials"><a href="https://www.instagram.com/churro_scope" target="_blank" class="soc"><i class="bi bi-instagram"></i></a><a href="https://www.facebook.com/profile.php?id=61582252856025" target="_blank" class="soc"><i class="bi bi-facebook"></i></a><a href="https://www.tiktok.com/@churroscope" target="_blank" class="soc"><i class="bi bi-tiktok"></i></a></div></div></div>
         </div>
       </div>
-      <div class="col-6 col-lg-3">
-        <h5 style="font-size:1rem;">CORE VALUES</h5>
-        <ul class="list-unstyled" style="font-size:.9rem;opacity:.8;line-height:2;">
-          <li>Creativity</li>
-          <li>Health</li>
-          <li>Uniqueness</li>
-          <li>Reliability</li>
-          <li>Respect</li>
-          <li>Optimism</li>
-          <li>Sustainability</li>
-        </ul>
-      </div>
-      <div class="col-6 col-lg-2">
-        <h5 style="font-size:1rem;">Quick Links</h5>
-        <ul class="list-unstyled" style="font-size:.9rem;opacity:.8;line-height:2;">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#menu">Menu</a></li>
-          <li><a href="#about">About Us</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3">
-        <h5 style="font-size:1rem;">Contact</h5>
-        <p style="font-size:.88rem;opacity:.8;line-height:2;">
-          <i class="bi bi-telephone me-2"></i>+63 917 123 4567<br>
-          <i class="bi bi-envelope me-2"></i>churroscope11@gmail.com<br>
-          <i class="bi bi-geo-alt me-2"></i>PLV<br>
-          <i class="bi bi-clock me-2"></i>Mon–Sun: 9 AM – 10 PM
-        </p>
+      <div class="reveal d2">
+        <div class="cform-card">
+          <div class="cform-grid">
+            <div class="cf"><label>Full Name</label><input type="text" placeholder="Your name"/></div>
+            <div class="cf"><label>Email</label><input type="email" placeholder="your@email.com"/></div>
+            <div class="cf"><label>Phone</label><input type="tel" placeholder="+63 9XX XXX XXXX"/></div>
+            <div class="cf"><label>Subject</label><select><option>General Inquiry</option><option>Order Inquiry</option><option>Catering / Events</option><option>Feedback</option></select></div>
+            <div class="cf full"><label>Message</label><textarea placeholder="How can we help you?"></textarea></div>
+            <div class="cf full"><button class="btn-submit" id="contactBtn">Send Message <i class="bi bi-send ms-2"></i></button></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom text-center">
-      &copy; ChurroScope. All rights reserved.
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-accent"></div>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand"><img src="ScopeLogo.png" alt="ChurroScope Logo"/>ChurroScope</div>
+        <p class="f-desc">Nutrient-rich, vegetable-infused churros made with creativity, care, and a commitment to health — one delicious bite at a time.</p>
+        <div class="f-socials">
+          <a href="https://www.instagram.com/churro_scope" target="_blank" class="fsoc"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61582252856025" target="_blank" class="fsoc"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.tiktok.com/@churroscope" target="_blank" class="fsoc"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="f-col">
+        <h6>Core Values</h6>
+        <div style="display:flex;flex-wrap:wrap;gap:.2rem;">
+          <span class="core-pill">Creativity</span><span class="core-pill">Health</span><span class="core-pill">Uniqueness</span><span class="core-pill">Reliability</span><span class="core-pill">Respect</span><span class="core-pill">Optimism</span><span class="core-pill">Sustainability</span><span class="core-pill">Cope</span><span class="core-pill">Organic</span><span class="core-pill">Passion</span><span class="core-pill">Excellence</span>
+        </div>
+      </div>
+      <div class="f-col">
+        <h6>Quick Links</h6>
+        <ul class="flinks">
+          <li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#menu">Menu</a></li><li><a href="#catering">Catering</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h6>Contact</h6>
+        <div class="fci"><i class="bi bi-telephone"></i><span>+63 987-654-3210</span></div>
+        <div class="fci"><i class="bi bi-envelope"></i><span>churroscope11@gmail.com</span></div>
+        <div class="fci"><i class="bi bi-geo-alt"></i><span>Valenzuela, Metro Manila</span></div>
+        <div class="fci"><i class="bi bi-clock"></i><span>Mon–Sun: 9 AM – 10 PM</span></div>
+      </div>
     </div>
+    <div class="footer-bottom">&copy; ChurroScope. All rights reserved. Made with 🌿 in the Philippines.</div>
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        const a = document.querySelector('.nav-link[href="#' + e.target.id + '"]');
-        if (a) a.classList.add('active');
-      }
-    });
-  }, { threshold: 0.45 });
-  sections.forEach(s => observer.observe(s));
+<div class="toast-box" id="toastBox"></div>
+<button class="float-btn" id="floatBtn"><i class="bi bi-bag-plus"></i> Order Churros</button>
 
-  function showMenuPanel(id, btn) {
-    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.menu-tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    btn.classList.add('active');
+<script>
+/* PARTICLES */
+(function(){
+  const c=document.getElementById('heroParts');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div'); p.className='hparticle';
+    const s=Math.random()*5+2;
+    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:${Math.random()*25}%;animation-duration:${Math.random()*16+10}s;animation-delay:${Math.random()*12}s;`;
+    c.appendChild(p);
   }
+})();
+
+/* SCROLL */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('solid',window.scrollY>50);
+  document.getElementById('floatBtn').classList.toggle('show',window.scrollY>350);
+});
+document.getElementById('floatBtn').onclick=()=>location.href='#menu';
+
+/* MOBILE NAV */
+document.getElementById('burger').onclick=()=>document.getElementById('mobMenu').classList.add('open');
+document.getElementById('mobClose').onclick=()=>document.getElementById('mobMenu').classList.remove('open');
+document.querySelectorAll('.ml').forEach(l=>l.onclick=()=>document.getElementById('mobMenu').classList.remove('open'));
+
+/* MOBILE CART */
+function chkMob(){ document.getElementById('cartBtnM').style.display=window.innerWidth<=768?'flex':'none'; }
+chkMob(); window.addEventListener('resize',chkMob);
+
+/* ACTIVE NAV */
+document.querySelectorAll('section[id]').forEach(s=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ document.querySelectorAll('.nav-links a').forEach(l=>l.classList.remove('active')); const a=document.querySelector('.nav-links a[href="#'+e.target.id+'"]'); if(a)a.classList.add('active'); }});
+  },{threshold:.35}).observe(s);
+});
+
+/* REVEAL */
+const ro=new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting)e.target.classList.add('up'); }),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* COUNTERS */
+function animN(el,t,sfx=''){
+  if(!el)return; let c=0; const step=Math.max(1,Math.ceil(t/60));
+  const id=setInterval(()=>{ c=Math.min(c+step,t); el.textContent=c+sfx; if(c>=t)clearInterval(id); },30);
+}
+new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){ animN(document.getElementById('hS1'),500,'+'); animN(document.getElementById('hS2'),1200,'+'); }});},{threshold:.5}).observe(document.getElementById('home'));
+const sb=document.querySelector('.stats-band');
+if(sb) new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){ animN(document.getElementById('sb1'),500,'+'); animN(document.getElementById('sb2'),1200,'+'); }});},{threshold:.5}).observe(sb);
+
+/* MENU TABS */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.menu-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel=document.getElementById('panel-'+btn.dataset.panel);
+    if(panel){ panel.classList.add('active'); panel.querySelectorAll('.reveal').forEach(r=>{ r.classList.remove('up'); setTimeout(()=>r.classList.add('up'),50); }); }
+  };
+});
+
+/* QTY */
+const qMap={};
+function cQty(id,d){ qMap[id]=Math.max(0,(qMap[id]||0)+d); const el=document.getElementById('qn-'+id); if(el)el.textContent=qMap[id]; }
+
+/* CART */
+let cart={};
+function addCart(id,name,price,img){ if(!cart[id])cart[id]={id,name,price,img,qty:0}; cart[id].qty++; syncCart(); toast('Added '+name+' to cart!','bi-bag-check-fill'); }
+function remCart(id){ delete cart[id]; syncCart(); }
+function adjCart(id,d){ if(!cart[id])return; cart[id].qty=Math.max(0,cart[id].qty+d); if(!cart[id].qty)delete cart[id]; syncCart(); }
+function syncCart(){
+  const tot=Object.values(cart).reduce((s,i)=>s+i.qty,0);
+  ['cartCount','cartCountM'].forEach(id=>{ const el=document.getElementById(id); if(el)el.textContent=tot; });
+  renderCart();
+}
+function renderCart(){
+  const body=document.getElementById('cartBody'), foot=document.getElementById('cartFoot');
+  const items=Object.values(cart);
+  if(!items.length){ body.innerHTML='<div class="cart-empty-s"><i class="bi bi-bag"></i><p style="font-weight:600;color:var(--choc);">Your cart is empty</p><p style="font-size:.82rem;margin-top:.3rem;">Add some healthy churros!</p></div>'; foot.style.display='none'; return; }
+  const grand=items.reduce((s,i)=>s+i.price*i.qty,0);
+  body.innerHTML=items.map(i=>`<div class="citem"><img src="${i.img}" alt="${i.name}"/><div class="citem-info"><strong>${i.name}</strong><div class="citem-price">₱${i.price} each</div><div class="citem-qty"><button class="ci-btn" onclick="adjCart('${i.id}',-1)">−</button><span style="font-size:.85rem;font-weight:700;color:var(--choc);">${i.qty}</span><button class="ci-btn" onclick="adjCart('${i.id}',1)">+</button><span style="font-size:.82rem;color:var(--terra);font-weight:700;margin-left:.4rem;">= ₱${i.price*i.qty}</span></div></div><button class="citem-rm" onclick="remCart('${i.id}')"><i class="bi bi-trash"></i></button></div>`).join('');
+  document.getElementById('cartTotal').textContent='₱'+grand;
+  foot.style.display='block';
+}
+function openCart(){ document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartPanel').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartPanel').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('cartBtn').onclick=openCart;
+document.getElementById('cartBtnM').onclick=openCart;
+document.getElementById('cartOverlay').onclick=closeCart;
+document.getElementById('cartClose').onclick=closeCart;
+document.getElementById('checkoutBtn').onclick=()=>{ closeCart(); cart={}; syncCart(); toast("Order placed! We'll contact you shortly 🎉",'bi-check-circle-fill','ok'); };
+
+/* FORMS */
+document.getElementById('inquiryBtn').onclick=()=>toast("Inquiry sent! We'll get back within 24 hrs 🌿",'bi-check-circle-fill','ok');
+document.getElementById('contactBtn').onclick=()=>toast("Message sent! Thank you 😊",'bi-check-circle-fill','ok');
+
+/* TOAST */
+function toast(msg,icon='bi-info-circle',type=''){
+  const box=document.getElementById('toastBox');
+  const t=document.createElement('div'); t.className='toast '+type;
+  t.innerHTML=`<i class="bi ${icon}"></i>${msg}`; box.appendChild(t);
+  setTimeout(()=>{ t.style.animation='tOut .4s ease both'; setTimeout(()=>t.remove(),400); },3200);
+}
 </script>
 </body>
 </html>
